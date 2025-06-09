@@ -6,10 +6,7 @@ This approach reduces the complexity of managing sensitive data while leveraging
 
 
 ## How It Works?
-
 To host each language version of the site on separate subdomains using GitHub Pages, we maintain a dedicated repository for each language. These language repositories are added as submodules to the main site-generator repository. Shell scripts in the site-generator automate the process: they generate all language-specific sites and push updates to their respective submodule repositories.
-
-
 
 ## Data Files
 
