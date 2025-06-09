@@ -1,0 +1,9 @@
+[submodule "site-en"]
+	path = site-en
+	url = git@github.com:dbless-commerce/site-en.git
+[submodule "site-ar"]
+	path = site-ar
+	url = git@github.com:dbless-commerce/site-ar.git
+[submodule "site-tr"]
+	path = site-tr
+	url = git@github.com:dbless-commerce/site-tr.git
