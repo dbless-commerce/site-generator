@@ -4,6 +4,13 @@ This project eliminates the need for a traditional database to simplify complian
 Instead of storing customer data or order details in a database, all orders and interactions are tracked directly through WhatsApp. 
 This approach reduces the complexity of managing sensitive data while leveraging WhatsApp as the primary communication and order-tracking platform.
 
+
+## How It Works?
+
+To host each language version of the site on separate subdomains using GitHub Pages, we maintain a dedicated repository for each language. These language repositories are added as submodules to the main site-generator repository. Shell scripts in the site-generator automate the process: they generate all language-specific sites and push updates to their respective submodule repositories.
+
+
+
 ## Data Files
 
 The project uses two JSON files to manage data:
