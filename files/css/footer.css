@@ -1,0 +1,15 @@
+footer {
+  background: #fff;
+  padding-bottom: 34px;
+  color: #1d3443;
+  visibility: hidden;
+}
+
+footer a {
+  display: block;
+  color: #1d3443;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin: auto;
+  font-size: 13px;
+}

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-folders=$(find . -maxdepth 1 -type d -name 'site-*' -printf '%P\n')
-for folder in $folders; do
-    echo "${folder##*-}"
-done
+bash scripts/helpers/create-css.sh
+bash scripts/helpers/copy-images.sh
+bash scripts/helpers/create-pages.sh
