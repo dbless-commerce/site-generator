@@ -44,7 +44,8 @@ for folder in $folders; do
             page_title=$(echo "$site_json" | jq -r ".pages[\"$page\"].title")
             page_description=$(echo "$site_json" | jq -r ".pages[\"$page\"].description")
             page_keywords=$(echo "$site_json" | jq -r ".pages[\"$page\"].keywords")
-            output_file="./${folder}/${page}.html"
+            page_url=$(echo "$site_json" | jq -r ".pages[\"$page\"].url // \"$page\"")
+            output_file="./${folder}/${page_url}.html"
 
             
 
