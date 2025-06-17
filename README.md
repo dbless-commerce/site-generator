@@ -1,34 +1,130 @@
-# DBless Ecommerce Website via WhatsApp
+# 🛍️ DBless Multilingual eCommerce Website via WhatsApp
 
-This project eliminates the need for a traditional database to simplify compliance with data regulations. 
-Instead of storing customer data or order details in a database, all orders and interactions are tracked directly through WhatsApp. 
-This approach reduces the complexity of managing sensitive data while leveraging WhatsApp as the primary communication and order-tracking platform.
+This project is a **database-free eCommerce site generator** that uses **WhatsApp** for handling customer orders and communication. It supports **multiple languages**, with each language version hosted on a separate GitHub Pages subdomain via **Git submodules**.
 
+---
 
-## How It Works?
-To host each language version of the site on separate subdomains using GitHub Pages, we maintain a dedicated repository for each language. These language repositories are added as submodules to the main site-generator repository. Shell scripts in the site-generator automate the process: they generate all language-specific sites and push updates to their respective submodule repositories.
+## 🌐 Key Features
 
-## Data Files
+- ✅ **No database needed** — Orders are placed via WhatsApp, avoiding complex data compliance issues.
+- 🌍 **Multilingual support** — Turkish (`tr`), Arabic (`ar`), and English (`en`) versions managed through Git submodules.
+- ⚙️ **Automated site generation** — Run a script to rebuild and deploy all language sites in one go.
+- 🗂️ **Clean, structured repo** — Uses centralized JSON files and organized folders for data and images.
 
-The project uses two JSON files to manage data:
+---
 
-1. **site.json**: Contains site-specific configurations.
-2. **product.json**: Stores product details.
+## 📁 Project Structure
 
-After adding or updating data in these files, run the `update.sh` script. This script generates the necessary files required for the application to function correctly.
+```
+site-generator/
+├── .vscode/            # VSCode config
+├── files/              # JSON data & images
+├── scripts/            # Automation scripts
+├── site-tr/            # Turkish site (submodule)
+├── site-ar/            # Arabic site (submodule)
+├── site-en/            # English site (submodule)
+├── .gitmodules         # Git submodule configs
+├── LICENSE             # License info
+└── README.md           # Project overview
+```
 
-## Client JS Files
+---
 
-Under the `programmatic` folder, you will find JavaScript files responsible for enabling the basket and other functionalities of the application. 
-These scripts ensure smooth operation and interaction for users.
+## 🔄 How It Works
 
-When you run the `update.sh` script located in the `scripts` folder, it processes and updates all the necessary files, ensuring the application is ready to function with the latest configurations and data.
+### 🧩 Language Submodules
 
-## Site Images for Pages & Products
+Each language version is a separate GitHub repository, added as a Git submodule to this main generator repo. This allows you to:
 
-All images for pages and products must follow a consistent naming convention and be placed in their respective folders:
+- Host different language sites at different subdomains (`tr.example.com`, `en.example.com`, etc.)
+- Manage content in isolation while sharing a common structure
 
-- **Page Images**: Store images for pages under the `img/pages` folder.
-- **Product Images**: Store product images under the `products` folder.
+### ⚙️ Data Management
 
-Ensure that the image filenames match the corresponding page or product names exactly to maintain consistency and avoid errors.
+Located in the `files/` directory:
+
+- `site.json`: Site-wide configuration (e.g., branding, layout).
+- `product.json`: Product listings.
+
+To update content:
+
+1. Edit the JSON files.
+2. Run the update script (see below).
+
+---
+
+## 🚀 Generate & Deploy Sites
+
+To build and update all language sites:
+
+```bash
+./scripts/update.sh
+```
+
+This script will:
+
+- Read from `site.json` and `product.json`
+- Generate static pages for each language
+- Commit and push updates to each submodule
+
+> ⚠️ Make sure your submodules are initialized before running this!
+
+---
+
+## 🧠 Client-Side Functionality
+
+The `programmatic/` folder (within each language site) includes:
+
+- Shopping basket logic
+- WhatsApp integration
+- UI interactivity for a seamless user experience
+
+These scripts are included automatically when you generate the sites.
+
+---
+
+## 🖼️ Image Organization
+
+All images are managed under the `files/` directory with clear conventions:
+
+- **Product Images:**  
+  `files/products/`  
+  Match image filenames to product names.
+
+- **Page Images:**  
+  `files/img/pages/`  
+  Match image filenames to page titles.
+
+> 📝 **Note:** File names must match exactly to avoid display errors.
+
+---
+
+## 🛠️ Development Setup
+
+Clone the repo and initialize submodules:
+
+```bash
+git clone <repo-url>
+cd site-generator
+git submodule update --init --recursive
+```
+
+After making changes to JSON files or static content:
+
+```bash
+./scripts/update.sh
+```
+
+---
+
+## 🪪 License
+
+This project is licensed under the [MIT License](./LICENSE).
+
+---
+
+## 📬 Contributions
+
+Feel free to open issues or PRs to improve the generator or add new features.
+
+---
