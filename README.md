@@ -58,13 +58,20 @@ To update content:
 To build and update all language sites:
 
 ```bash
-./scripts/update.sh
+./scripts/generate.sh
 ```
 
 This script will:
 
-- Read from `site.json` and `product.json`
+- Read from `site.json`, `company, json`and `product.json`
 - Generate static pages for each language
+
+To build and update all language sites:
+
+```bash
+./scripts/push-sites.sh
+```
+This script will:
 - Commit and push updates to each submodule
 
 > ⚠️ Make sure your submodules are initialized before running this!
