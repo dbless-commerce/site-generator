@@ -15,7 +15,7 @@ generate_html() {
   <title>${title}</title>
   <meta name="description" content="${desc}">
   <meta name="keywords" content="${keywords}">
-  <link rel="stylesheet" href="/static/site.css"/>
+  <link rel="stylesheet" href="../site.css"/>
   <link rel="icon" href="/favicon.png" type="image/png"/>
 </head>
 <body>

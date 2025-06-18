@@ -8,16 +8,17 @@ function changeBtnAddToBasket(parent, display) {
 }
 
 function basketAdder(prevElem, prdId) {
-  let exi = BASKET.find(p => p.id == prdId);
+  let exi = BASKET.find((p) => p.id == prdId);
 
-  let $q = em(exi.quantity + " Adet");
+  let $q = em(exi.quantity + SITE.quantity);
 
   let mbs = exi.quantity > 1 || true ? "minus" : "delete";
   let mbs2 = exi.quantity > 1 ? "çıkart" : "sil";
   let $mb = img("/static/img/" + mbs + ".png", mbs2);
   $mb.addEventListener("click", function () {
-    if (exi.quantity > 1) { decreaseBasket(prdId, exi.quantity); }
-    else {
+    if (exi.quantity > 1) {
+      decreaseBasket(prdId, exi.quantity);
+    } else {
       changeBtnAddToBasket($mb.parentElement, "inline-block");
       removeFromBasket(prdId);
     }
@@ -25,7 +26,9 @@ function basketAdder(prevElem, prdId) {
 
   let $pb = img("/static/img/plus.png", "ekle");
   $mb.className = $pb.className = "bskbtn";
-  $pb.addEventListener("click", function () { addToBasket(prdId); });
+  $pb.addEventListener("click", function () {
+    addToBasket(prdId);
+  });
 
   insertAfter(prevElem, $pb);
   insertAfter(prevElem, $q);
@@ -34,7 +37,7 @@ function basketAdder(prevElem, prdId) {
 
 function fnAddToBasket() {
   this.style.display = "none";
-  let x = p("Sepete Eklendi");
+  let x = p(SITE.addToBasket);
   x.style.marginBottom = "5px";
   insertAfter(this, x);
 
@@ -44,18 +47,33 @@ function fnAddToBasket() {
 }
 
 function addToBasket(prdId, quantity) {
-  let db = PRODUCTS.find(p => p.id == prdId);
-  if (quantity == undefined) { quantity = 1; }
+  let db = PRODUCTS.find((p) => p.id == prdId);
+  if (quantity == undefined) {
+    quantity = 1;
+  }
 
-  let existing = BASKET.find(p => p.id == db.id);
-  if (existing) { BASKET = BASKET.map(p => p.id === existing.id ? { ...p, quantity: existing.quantity + 1 } : p); }
-  else { BASKET.push({ id: db.id, name: db.name, url: db.url, price: db.price, quantity: quantity }); }
+  let existing = BASKET.find((p) => p.id == db.id);
+  if (existing) {
+    BASKET = BASKET.map((p) =>
+      p.id === existing.id ? { ...p, quantity: existing.quantity + 1 } : p
+    );
+  } else {
+    BASKET.push({
+      id: db.id,
+      name: db.name,
+      url: db.url,
+      price: db.price,
+      quantity: quantity,
+    });
+  }
 
   refreshBasket();
 }
 
 function decreaseBasket(prdId, quantity) {
-  BASKET = BASKET.map(p => p.id === prdId ? { ...p, quantity: quantity - 1 } : p);
+  BASKET = BASKET.map((p) =>
+    p.id === prdId ? { ...p, quantity: quantity - 1 } : p
+  );
   refreshBasket();
 }
 
@@ -69,7 +87,7 @@ function emptyBasket() {
 }
 
 function removeFromBasket(prdId) {
-  BASKET = BASKET.filter(p => p.id !== prdId);
+  BASKET = BASKET.filter((p) => p.id !== prdId);
   refreshBasket();
   cPrd("#products", prdId);
   cPrd(".prd", prdId);
@@ -77,20 +95,30 @@ function removeFromBasket(prdId) {
 
 function cPrd(sel, prdId) {
   let p = document.querySelector(sel + " > li[data-id='" + prdId + "']");
-  if (p) { changeBtnAddToBasket(p, "inline-block"); }
+  if (p) {
+    changeBtnAddToBasket(p, "inline-block");
+  }
 }
 
 function cPrdAdd(sel, p) {
   let pp = document.querySelector(sel + " > li[data-id='" + p.id + "']");
-  if (pp) { basketAdder(changeBtnAddToBasket(pp, "none"), p.id); }
+  if (pp) {
+    basketAdder(changeBtnAddToBasket(pp, "none"), p.id);
+  }
 }
 
 function calcShip(w) {
-  if (w <= 3) { return 146; }
-  else if (w <= 5) { return 168; }
-  else if (w <= 10) { return 192 / 2; }
-  else if (w < 15) { return 247 / 2; }
-  else { return 0; }
+  if (w <= 3) {
+    return 146;
+  } else if (w <= 5) {
+    return 168;
+  } else if (w <= 10) {
+    return 192 / 2;
+  } else if (w < 15) {
+    return 247 / 2;
+  } else {
+    return 0;
+  }
 }
 
 function getTotals() {
@@ -112,7 +140,10 @@ function refreshBasket() {
 
   let $bi = document.getElementById("basketInfo");
   if (BASKET.length > 0) {
-    $bi.querySelector("div").textContent = BASKET.reduce((sum, item) => sum + item.quantity, 0);
+    $bi.querySelector("div").textContent = BASKET.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
     $bi.style.visibility = "visible";
   } else {
     $bi.querySelector("div").textContent = "";
@@ -124,20 +155,26 @@ function refreshBasket() {
   rmAfter($ul);
 
   let $be = document.querySelector("#btnEmptyBasket");
-  if ($be) { $be.style.display = "none"; }
+  if ($be) {
+    $be.style.display = "none";
+  }
 
   if (BASKET.length > 0) {
     let frag = document.createDocumentFragment();
     let $b = document.querySelector("#basket");
 
-    if ($be) { $be.style.display = "inline-block"; }
+    if ($be) {
+      $be.style.display = "inline-block";
+    }
 
     let $pTotal = p("");
     $pTotal.id = "pTotal";
-    $pTotal.textContent = "Ürün Tutarı : " + formatPrice(total) + " (KDV Dahil)";
+    $pTotal.textContent = `${SITE.productTotal}: ${formatPrice(total)} ${
+      SITE.vatIncluded
+    }`;
     frag.append($pTotal);
 
-    let $e = em("15 kg ve üzeri siparişlerde kargo ücretsizdir.");
+    let $e = em(SITE.freeShippingNote);
     $e.style.fontSize = "13px";
     $e.style.color = "#333";
     $e.style.paddingBottom = "8px";
@@ -145,28 +182,29 @@ function refreshBasket() {
     $e.style.marginTop = "-5px";
     let ship = calcShip(w);
     if (w < 15) {
-      let $c = p("Kargo Ücreti: " + ship + " TL (Vergiler Dahil)");
+      let $c = p(`${SITE.shippingCost}: ${ship} ${SITE.shippingCostNote}`);
       frag.append($c);
       frag.append($e);
-    }
-    else {
-      $e.textContent = "Kargonuz ücretsiz.";
+    } else {
+      $e.textContent = SITE.shippingFree;
       frag.append($e);
     }
 
     let $total = p("");
     $total.id = "total";
-    $total.textContent = "Genel Toplam : " + formatPrice(total + ship);
+    $total.textContent = SITE.grandTotal + " : " + formatPrice(total + ship);
     frag.append($total);
 
     $bi.querySelector("em").textContent = formatPrice(total);
 
-    let $bw = btn("Whatsapp'dan Siparişini İlet");
+    let $bw = btn(SITE.orderViaWhatsapp);
     $bw.id = "btnOrderFromWhatsapp";
     $bw.addEventListener("click", function () {
       let phone = COMPANY.phone.replace(/\D/g, "");
       let message = "Merhaba,\n\n";
-      BASKET.forEach(function (p) { message += `${p.quantity} ${p.name} (${p.price} x ${p.quantity})\n`; });
+      BASKET.forEach(function (p) {
+        message += `${p.quantity} ${p.name} (${p.price} x ${p.quantity})\n`;
+      });
 
       let { total, qp, w } = getTotals();
       let ship = calcShip(w);
@@ -177,12 +215,20 @@ function refreshBasket() {
 
       let encoded = encodeURIComponent(message);
 
-      if (IS_MOBILE) { window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank"); }
-      else { window.open(`https://web.whatsapp.com/send?phone=${phone}&text=${encoded}`, "_blank"); }
+      if (IS_MOBILE) {
+        window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
+      } else {
+        window.open(
+          `https://web.whatsapp.com/send?phone=${phone}&text=${encoded}`,
+          "_blank"
+        );
+      }
     });
     frag.append($bw);
 
-    let no_wa = p2("WhatsApp kullanmıyorsanız,<br/>sipariş ve sorularınız için bize <a target='_blank' href='mailto:info@ozumgida.com'>info@ozumgida.com</a> adresimizden ulaşabilirsiniz.") ;
+    let no_wa = p2(
+      `${SITE.notUsingWhatsapp},<br/>${SITE.contactUsWithEmail} <a target='_blank' href='mailto:info@ozumgida.com'>info@ozumgida.com</a> ${SITE.reachUsViaEmail}.`
+    );
     no_wa.id = "no_wa";
     frag.append(no_wa);
 
@@ -194,7 +240,9 @@ function refreshBasket() {
       let $li = li();
       let $db = img("/static/img/delete.png", "sil");
       $db.className = "btnDelete";
-      $db.addEventListener("click", function () { removeFromBasket(p.id); });
+      $db.addEventListener("click", function () {
+        removeFromBasket(p.id);
+      });
       $li.append($db);
 
       doProductInner($li, p, true);
@@ -225,14 +273,17 @@ function doBasket($body, $f) {
   $b.id = "basket";
   $b.append(p2(SITE.basketWarning));
 
-  let $bs = btn("Sepeti Göster");
+  let $bs = btn(SITE.showBasket);
   $bs.id = "btnShowBasket";
   $bs.addEventListener("click", function () {
-    if ($bs.dataset.active === "true") { hideBasket(); }
-    else { showBasket(); }
+    if ($bs.dataset.active === "true") {
+      hideBasket();
+    } else {
+      showBasket();
+    }
   });
 
-  let $be = btn("Sepeti Boşalt");
+  let $be = btn(SITE.emptyBasket);
   $be.id = "btnEmptyBasket";
   $be.addEventListener("click", emptyBasket);
   $be.style.display = "none";
@@ -248,7 +299,7 @@ function showBasket() {
   let p = document.getElementById("basket");
   let b = document.getElementById("btnShowBasket");
   b.dataset.active = "true";
-  b.innerHTML = "Sepeti Gizle";
+  b.innerHTML = SITE.hideBasket;
   p.style.height = "fit-content";
 }
 
@@ -256,8 +307,10 @@ function hideBasket() {
   let p = document.getElementById("basket");
   let b = document.getElementById("btnShowBasket");
   b.dataset.active = "false";
-  b.innerHTML = "Sepeti Göster";
+  b.innerHTML = SITE.showBasket;
   p.style.height = IS_M ? "260px" : "220px";
 }
 
-function formatPrice(price) { return price.toLocaleString("tr-TR") + " TL"; }
+function formatPrice(price) {
+  return price.toLocaleString("tr-TR") + " TL";
+}
