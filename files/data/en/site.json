@@ -1,0 +1,93 @@
+{
+  "pages": {
+    "index": {
+      "title": "Özüm'le | Traditional Flavors of Erzincan",
+      "description": "Özüm'le is a family brand that carefully selects traditional Erzincan flavors and brings them to modern tables, preserving recipes passed down through generations.",
+      "keywords": "ozumle, erzincan tulum cheese, butter, cheese, organic erzincan food, natural cheese, traditional erzincan products"
+    },
+    "urunlerimiz": {
+      "title": "Our Products | Özüm'le Erzincan Flavors",
+      "description": "Discover the unique taste of Erzincan Tulum Cheese. Made with milk from animals fed on highland herbs and crafted using traditional methods, our cheeses bring natural richness to your table.",
+      "keywords": "Erzincan Tulum Cheese, traditional cheese, handmade cheese, natural tulum cheese, regional erzincan products"
+    },
+    "lezzetimizin-hikayesi": {
+      "title": "The Story Behind Our Flavor | Özüm'le Erzincan Flavors",
+      "description": "We keep the centuries-old tradition of Erzincan Tulum Cheese alive. Discover the story of our cheeses, matured by masters in the clean mountain air.",
+      "keywords": "Erzincan cheese tradition, story of traditional tulum cheese, Anatolian cheese culture, regional food production"
+    },
+    "hakkimizda": {
+      "title": "About Us | The Özüm'le Family",
+      "description": "As the Özüm'le family, we bring flavors from Erzincan’s fertile lands to your table using traditional methods passed down from grandfather to grandchild. Discover our story and values.",
+      "keywords": "Ozumle food story, Erzincan family business, traditional production company, local food producer, organic cheese production"
+    },
+    "kvkk": {
+      "title": "Personal Data Protection | Özüm'le Privacy Policy",
+      "description": "At Özüm'le, the security and protection of your personal data is our top priority. Learn more about our policies under the Personal Data Protection Law (KVKK).",
+      "keywords": "personal data protection, KVKK-compliant e-commerce, customer data security, data protection standards, data privacy in the food sector"
+    },
+    "satis-sozlesmesi": {
+      "title": "Distance Sales Agreement | Özüm'le Legal Information",
+      "description": "Review our distance sales agreement, clearly outlining your rights and our responsibilities during your purchase.",
+      "keywords": "food product sales agreement, legal consumer rights, e-commerce consumer protection, legal terms for cheese purchases"
+    },
+    "gizlilik-politikasi": {
+      "title": "Privacy Policy | Özüm'le Legal Information",
+      "description": "We value your privacy at Özüm'le. Read our privacy policy to learn how we collect, use, and protect your personal information.",
+      "keywords": "privacy policy, personal data protection, data security, user privacy, e-commerce privacy policy, customer data protection, Özüm'le privacy"
+    },
+    "iletisim": {
+      "title": "Contact Us | Özüm'le Contact Information",
+      "description": "For questions, suggestions, or orders, feel free to contact the Özüm'le family. We’d be happy to help you.",
+      "keywords": "Ozumle food contact channels, Erzincan cheese order line, customer service contact, local product order contact"
+    },
+    "site-haritasi": {
+      "title": "Site Map | Özüm'le Website Guide",
+      "description": "Quickly access all pages on the Özüm'le website from one place. Our site map is designed to help you find the information you need easily.",
+      "keywords": "Ozumle site map, Erzincan products website navigation, local food site guide, cheese shopping site structure"
+    },
+    "404": {
+      "title": "404 - Page Not Found | Özüm'le",
+      "description": "The page you're looking for couldn't be found. Please return to our homepage to continue browsing.",
+      "keywords": "page not found, 404"
+    }
+  },
+  "headImgSloganStart": "Traditional flavors of Erzincan",
+  "headImgSloganEnd": "brought to your table with a modern touch.",
+  "footImgSloganStart": "The richness of Erzincan’s lands",
+  "footImgSloganEnd": "preserved with a modern culinary approach.",
+  "headSloganBtn": "Browse Products",
+  "headSloganLnk": "/urunlerimiz.html",
+  "footSloganBtn": "Our Flavor Story",
+  "footSloganLnk": "/lezzetimizin-hikayesi.html",
+  "basketWarning": "After adding products to your cart,<br/>click the 'Send Order via WhatsApp' button<br/>to quickly send your order and shipping details to us,<br/>and complete your shopping with ease.",
+  "map": "View on Map",
+  "home": "Home",
+  "products": "Our Products",
+  "about": "About Us",
+  "story": "Our Flavor Story",
+  "distanceSales": "Distance Sales Agreement",
+  "privacy": "Privacy Policy",
+  "kvkk": "KVKK Information Notice",
+  "contact": "Contact",
+  "distanceSalesAlt": "Remote Sales Agreement",
+  "privacyAlt": "Privacy Policy",
+  "sitemap": "Site Map",
+  "addToBasket": "Add to Cart",
+  "hideBasket": "Hide Cart",
+  "showBasket": "Show Cart",
+  "emptyBasket": "Empty Cart",
+  "quantity": "Quantity",
+  "orderViaWhatsapp": "Send Your Order via WhatsApp",
+  "productTotal": "Product Total",
+  "vatIncluded": "(VAT Included)",
+  "freeShippingNote": "Free shipping for orders 15 kg and above.",
+  "shippingCost": "Shipping Cost:",
+  "notUsingWhatsapp": "If you are not using WhatsApp",
+  "contactUsWithEmail": "For your orders and questions, contact us",
+  "reachUsViaEmail": "You can reach us through our address",
+  "shippingTaxNote": " TL (Including Taxes)",
+  "shippingFree": "Your shipping is free",
+  "grandTotal": "Grand Total",
+  "pageNotFoundTitle": "Page Not Found",
+  "pageNotFoundMessage": "The page you are looking for was not found. Please select another page from the menu."
+}
