@@ -20,7 +20,7 @@ generate_html() {
 </head>
 <body>
   <div id="loading">loading...</div>
-  <script src="/static/site.js"></script>
+  <script src="static/site.js"></script>
 </body>
 </html>
 EOF

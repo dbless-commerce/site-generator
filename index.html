@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=width=device-width, initial-scale=1.0">
+    <title>Select Language / Dil Seçin / اختر اللغة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .language-selector {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .language-selector h1 {
+            margin-bottom: 2rem;
+            color: #333;
+        }
+        .language-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .language-link {
+            display: block;
+            padding: 1rem 2rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .language-link:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        .flag {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <h1>Select Your Language</h1>
+        <div class="language-links">
+            <a href="./site-en/" class="language-link">
+                <span class="flag">🇺🇸</span>English
+            </a>
+            <a href="./site-tr/" class="language-link">
+                <span class="flag">🇹🇷</span>Türkçe
+            </a>
+            <a href="./site-ar/" class="language-link">
+                <span class="flag">🇸🇦</span>العربية
+            </a>
+        </div>
+    </div>
+</body>
+</html>
