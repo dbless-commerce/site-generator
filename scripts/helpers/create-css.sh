@@ -14,6 +14,11 @@ set_error_handling
 # Configuration
 CSS_BASE_FILE="files/css/base.css"
 CSS_FOOTER_FILE="files/css/footer.css"
+CSS_HEADER_FILE="files/css/header.css"
+CSS_PRODUCT_FILE="files/css/product.css"
+CSS_BASKET_FILE="files/css/basket.css"
+CSS_LAYOUT_FILE="files/css/layout.css"
+CSS_RESPONSIVE_FILE="files/css/responsive.css"
 OUTPUT_CSS_NAME="site.css"
 
 # Validate source CSS files exist
@@ -27,7 +32,27 @@ validate_css_sources() {
     if [ ! -f "$CSS_FOOTER_FILE" ]; then
         missing_files+=("$CSS_FOOTER_FILE")
     fi
-    
+
+    if [ ! -f "$CSS_HEADER_FILE" ]; then
+        missing_files+=("$CSS_HEADER_FILE")
+    fi
+
+    if [ ! -f "$CSS_PRODUCT_FILE" ]; then
+        missing_files+=("$CSS_PRODUCT_FILE")
+    fi
+
+    if [ ! -f "$CSS_BASKET_FILE" ]; then
+        missing_files+=("$CSS_BASKET_FILE")
+    fi
+
+    if [ ! -f "$CSS_LAYOUT_FILE" ]; then
+        missing_files+=("$CSS_LAYOUT_FILE")
+    fi
+
+    if [ ! -f "$CSS_RESPONSIVE_FILE" ]; then
+        missing_files+=("$CSS_RESPONSIVE_FILE")
+    fi
+
     if [ ${#missing_files[@]} -gt 0 ]; then
         error "Missing CSS source files:"
         for file in "${missing_files[@]}"; do
@@ -90,7 +115,15 @@ create_css_for_site() {
     fi
     
     # Merge CSS files
-    if cat "$CSS_BASE_FILE" "$CSS_FOOTER_FILE" > "$temp_merged" 2>/dev/null; then
+    if cat \
+        "$CSS_BASE_FILE" \
+        "$CSS_FOOTER_FILE" \
+        "$CSS_HEADER_FILE" \
+        "$CSS_PRODUCT_FILE" \
+        "$CSS_BASKET_FILE" \
+        "$CSS_LAYOUT_FILE" \
+        "$CSS_RESPONSIVE_FILE" > "$temp_merged" 2>/dev/null; then
+
         debug "✓ Merged CSS files successfully"
         
         # Optimize the merged CSS
@@ -146,6 +179,11 @@ main() {
     print_section "CSS Source Files"
     info "  - Base CSS: $CSS_BASE_FILE"
     info "  - Footer CSS: $CSS_FOOTER_FILE"
+    info "  - Header CSS: $CSS_HEADER_FILE"
+    info "  - Product CSS: $CSS_PRODUCT_FILE"
+    info "  - Basket CSS: $CSS_BASKET_FILE"
+    info "  - Layout CSS: $CSS_LAYOUT_FILE"
+    info "  - Responsive CSS: $CSS_RESPONSIVE_FILE"
     info "  - Output: $OUTPUT_CSS_NAME (optimized)"
     
     # Process each site directory

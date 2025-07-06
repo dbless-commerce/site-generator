@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Enhanced Multi-Language HTML Generation Script - Using Shared Components
-
 # Get script directory and source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -61,7 +59,6 @@ EOF
     } > "$OUTPUT_DIR/404.html"
 }
 
-# Generate contact page
 generate_contact_page() {
     local company_data=$(load_json "company" "$DATA_DIR")
     local site_data=$(load_json "site" "$DATA_DIR")

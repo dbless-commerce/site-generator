@@ -1,0 +1,44 @@
+nav {
+  background: #fff;
+  height: 55px;
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+
+menu {
+  background: #ede6db;
+  margin-top: -25px;
+  border-radius: 13px;
+  display: inline-block;
+  padding: 0 34px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 100;
+}
+
+menu li {
+  display: inline-block;
+  padding: 8px;
+  margin: 13px;
+  color: #584629;
+  font-size: 19px;
+  cursor: pointer;
+  text-align: center;
+  text-underline-offset: 5px;
+}
+
+.menu-toggle {
+  display: none !important;
+}
+
+.menu-item {
+  display: inline-block !important;
+}
+
+.menu-item.active {
+  background: #4caf50;
+  color: white !important;
+  font-weight: bold;
+  border-radius: 8px;
+}
