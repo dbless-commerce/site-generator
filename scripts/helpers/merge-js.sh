@@ -1,28 +1,21 @@
 #!/bin/bash
 
-# Merges JavaScript files into each language site's static directory
-
-# Get script directory and source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 source "$PARENT_DIR/shared/utils.sh"
 
-# Set up error handling
 set_error_handling
 
-# Configuration
 JS_SOURCE_FILE="programmatic/main.js"
 OUTPUT_JS_NAME="site.js"
 STATIC_DIR_NAME="static"
 
-# Validate source JavaScript file exists
 validate_js_source() {
     if [ ! -f "$JS_SOURCE_FILE" ]; then
         error "JavaScript source file not found: $JS_SOURCE_FILE"
         return 1
     fi
     
-    # Check if file is not empty
     if [ ! -s "$JS_SOURCE_FILE" ]; then
         warn "JavaScript source file is empty: $JS_SOURCE_FILE"
         return 1
@@ -31,13 +24,10 @@ validate_js_source() {
     return 0
 }
 
-# Get file size in a cross-platform way
 get_file_size() {
     local file="$1"
     if command -v stat >/dev/null 2>&1; then
-        # Try BSD stat first (macOS)
         stat -f%z "$file" 2>/dev/null || \
-        # Fall back to GNU stat (Linux)
         stat -c%s "$file" 2>/dev/null || \
         echo "unknown"
     else
@@ -45,7 +35,6 @@ get_file_size() {
     fi
 }
 
-# Merge JavaScript for a single language site
 merge_js_for_site() {
     local folder="$1"
     
@@ -59,17 +48,14 @@ merge_js_for_site() {
     local static_dir="$folder/$STATIC_DIR_NAME"
     local output_file="$static_dir/$OUTPUT_JS_NAME"
     
-    # Ensure static directory exists
     ensure_directory "$static_dir"
     
-    # Read main JavaScript content
     local main_content
     if ! main_content=$(cat "$JS_SOURCE_FILE" 2>/dev/null); then
         error "Failed to read JavaScript source file: $JS_SOURCE_FILE"
         return 1
     fi
     
-    # Write merged content to output file
     if echo "$main_content" > "$output_file" 2>/dev/null; then
         local file_size=$(get_file_size "$output_file")
         local line_count=$(wc -l < "$output_file" 2>/dev/null || echo "unknown")
@@ -85,7 +71,6 @@ merge_js_for_site() {
     fi
 }
 
-# Validate merged files
 validate_merged_files() {
     local processed_sites=("$@")
     local validation_errors=0
@@ -112,7 +97,6 @@ validate_merged_files() {
     fi
 }
 
-# Main function
 main() {
     start_timer
     
@@ -120,13 +104,11 @@ main() {
     
     log "Starting JavaScript merge process for all language sites..."
     
-    # Validate JavaScript source file exists
     if ! validate_js_source; then
         error "JavaScript source validation failed."
         exit 1
     fi
     
-    # Find all site directories
     local site_folders=()
     while IFS= read -r folder; do
         if [ -n "$folder" ]; then
@@ -152,7 +134,6 @@ main() {
     info "  - Lines: ${source_lines}"
     info "  - Output: $STATIC_DIR_NAME/$OUTPUT_JS_NAME"
     
-    # Process each site directory
     local processed_sites=()
     local failed_sites=()
     
@@ -164,12 +145,10 @@ main() {
         fi
     done
     
-    # Validate merged files
     if [ ${#processed_sites[@]} -gt 0 ]; then
         validate_merged_files "${processed_sites[@]}"
     fi
     
-    # Print summary
     echo ""
     if [ ${#processed_sites[@]} -gt 0 ]; then
         print_summary "JavaScript Merge Process" "${processed_sites[@]}"
@@ -187,7 +166,6 @@ main() {
     fi
 }
 
-# Run main function if script is executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi

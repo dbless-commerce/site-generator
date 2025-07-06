@@ -4,7 +4,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 source "$PARENT_DIR/shared/utils.sh"
 
-# Set up error handling
 set_error_handling
 
 # Configuration
@@ -14,7 +13,6 @@ SOURCE_PAGES_DIR="files/img/pages"
 SOURCE_LOGO="files/logo.jpg"
 SOURCE_FAVICON="files/favicon.png"
 
-# Validate source directories exist
 validate_source_files() {
     local missing_files=()
     
@@ -49,7 +47,6 @@ validate_source_files() {
     return 0
 }
 
-# Copy images for a single language site
 copy_images_for_site() {
     local folder="$1"
     
@@ -60,7 +57,6 @@ copy_images_for_site() {
     
     progress "Processing images for: $folder"
     
-    # Create necessary directories
     local img_dirs=(
         "$folder/static/img"
         "$folder/static/img/pages"
@@ -71,7 +67,6 @@ copy_images_for_site() {
         ensure_directory "$dir"
     done
     
-    # Copy image files with error checking
     local copy_operations=(
         "$SOURCE_IMAGES_DIR/*.png:$folder/static/img/"
         "$SOURCE_PRODUCTS_DIR/*.jpg:$folder/static/img/products/"
@@ -111,13 +106,11 @@ main() {
     
     log "Starting image copy process for all language sites..."
     
-    # Validate source files exist
     if ! validate_source_files; then
         error "Source validation failed. Please ensure all required files exist."
         exit 1
     fi
     
-    # Find all site directories
     local site_folders=()
     while IFS= read -r folder; do
         if [ -n "$folder" ]; then
@@ -134,8 +127,7 @@ main() {
     for folder in "${site_folders[@]}"; do
         info "  - $folder"
     done
-    
-    # Process each site directory
+
     local processed_sites=()
     local failed_sites=()
     
@@ -147,7 +139,6 @@ main() {
         fi
     done
     
-    # Print summary
     echo ""
     if [ ${#processed_sites[@]} -gt 0 ]; then
         print_summary "Image Copy Process" "${processed_sites[@]}"
@@ -165,7 +156,6 @@ main() {
     fi
 }
 
-# Run main function if script is executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi

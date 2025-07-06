@@ -7,10 +7,8 @@ source "$PARENT_DIR/shared/utils.sh"
 source "$PARENT_DIR/shared/html-generators.sh"
 source "$PARENT_DIR/shared/product-generators.sh"
 
-# Set up error handling
 set_error_handling
 
-# Initialize language-specific directories and set global variables for shared functions
 init_language() {
     local lang="$1"
     
@@ -30,7 +28,6 @@ init_language() {
     copy_static_files "$STATIC_DIR" "$OUTPUT_DIR" "$lang"
 }
 
-# Generate 404 page
 generate_404_page() {
     log "Generating 404 page for $CURRENT_LANG..."
     
@@ -76,7 +73,6 @@ generate_contact_page() {
     local map_link=$(get_json_value "$company_data" "mapLink" "https://maps.app.goo.gl/4mFyGQx7jfX2S2vh7")
     local page_subtitle=$(generate_page_subtitle "iletisim")
     
-    # Generate address from array
 local address_block=""
 if echo "$company_data" | jq -e '.address | type == "array"' > /dev/null 2>&1; then
     while IFS= read -r line; do
@@ -123,7 +119,6 @@ EOF
     } > "$OUTPUT_DIR/iletisim.html"
 }
 
-# Generate site map page
 generate_sitemap_page() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local products_data=$(load_json "products" "$DATA_DIR")
@@ -154,7 +149,6 @@ EOF
     } > "$OUTPUT_DIR/site-haritasi.html"
 }
 
-# Generate home page
 generate_home_page() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local company_data=$(load_json "company" "$DATA_DIR")
@@ -190,7 +184,6 @@ EOF
     } > "$OUTPUT_DIR/index.html"
 }
 
-# Generate products page
 generate_products_page() {
     local company_data=$(load_json "company" "$DATA_DIR")
     local site_data=$(load_json "site" "$DATA_DIR")
@@ -215,7 +208,6 @@ EOF
     } > "$OUTPUT_DIR/urunlerimiz.html"
 }
 
-# Generate individual product pages
 generate_product_pages() {
     local products_data=$(load_json "products" "$DATA_DIR")
     local site_data=$(load_json "site" "$DATA_DIR")
@@ -252,7 +244,6 @@ EOF
     fi
 }
 
-# Generate static pages from data
 generate_static_pages() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local products_data=$(load_json "products" "$DATA_DIR")
@@ -297,20 +288,16 @@ EOF
     fi
 }
 
-# Process single language
 process_language() {
     local lang="$1"
     
-    # Check if language directory exists
     if ! validate_directory "./site-${lang}"; then
         warn "Language directory ./site-${lang} not found, skipping..."
         return 1
     fi
     
-    # Initialize language-specific settings
     init_language "$lang"
     
-    # Generate all pages for this language
     generate_home_page
     generate_products_page
     generate_product_pages
@@ -323,7 +310,6 @@ process_language() {
     return 0
 }
 
-# Generate main language selection index
 generate_main_index() {
     log "Generating main language selection index..."
     
@@ -401,20 +387,17 @@ generate_main_index() {
 EOF
 }
 
-# Main build function
 main() {
     start_timer
     
     print_banner "Multi-Language HTML Generator"
     
-    # Check dependencies
     if ! check_dependencies "jq"; then
         exit 1
     fi
     
     log "Starting multi-language HTML generation..."
     
-    # Process each language
     local processed_languages=()
     local failed_languages=()
     
@@ -428,10 +411,8 @@ main() {
         fi
     done
     
-    # Generate main language selection index
     generate_main_index
     
-    # Print summary
     if [ ${#processed_languages[@]} -gt 0 ]; then
         print_summary "HTML Generation" "${processed_languages[@]}"
     fi
@@ -448,7 +429,6 @@ main() {
     fi
 }
 
-# Run main function if script is executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi

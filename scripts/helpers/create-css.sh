@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Enhanced CSS Creation Script - Using Shared Components
-# Merges and optimizes CSS files for all language site directories
-
 # Get script directory and source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -21,7 +18,6 @@ CSS_LAYOUT_FILE="files/css/layout.css"
 CSS_RESPONSIVE_FILE="files/css/responsive.css"
 OUTPUT_CSS_NAME="site.css"
 
-# Validate source CSS files exist
 validate_css_sources() {
     local missing_files=()
     
@@ -64,7 +60,6 @@ validate_css_sources() {
     return 0
 }
 
-# Optimize CSS by removing unnecessary whitespace and formatting
 optimize_css() {
     local input_file="$1"
     local output_file="$2"
@@ -74,10 +69,8 @@ optimize_css() {
         return 1
     fi
     
-    # Create temporary file for processing
     local tmpfile=$(mktemp)
     
-    # Remove newlines, tabs, and compress multiple spaces
     if tr -d '\n\t' < "$input_file" | sed 's/  */ /g' > "$tmpfile"; then
         if mv "$tmpfile" "$output_file"; then
             debug "✓ Optimized CSS: $output_file"
@@ -94,7 +87,6 @@ optimize_css() {
     fi
 }
 
-# Create CSS for a single language site
 create_css_for_site() {
     local folder="$1"
     
@@ -108,7 +100,6 @@ create_css_for_site() {
     local output_file="$folder/$OUTPUT_CSS_NAME"
     local temp_merged=$(mktemp)
     
-    # Remove existing CSS file if it exists
     if [ -f "$output_file" ]; then
         rm -f "$output_file"
         debug "Removed existing CSS file: $output_file"
@@ -126,7 +117,6 @@ create_css_for_site() {
 
         debug "✓ Merged CSS files successfully"
         
-        # Optimize the merged CSS
         if optimize_css "$temp_merged" "$output_file"; then
             local file_size=$(stat -f%z "$output_file" 2>/dev/null || stat -c%s "$output_file" 2>/dev/null || echo "unknown")
             info "✅ Created optimized CSS for $folder (${file_size} bytes)"
@@ -152,7 +142,6 @@ main() {
     
     log "Starting CSS creation process for all language sites..."
     
-    # Validate CSS source files exist
     if ! validate_css_sources; then
         error "CSS source validation failed. Please ensure all required files exist."
         exit 1

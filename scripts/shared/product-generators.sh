@@ -1,13 +1,8 @@
 #!/bin/bash
 
-# Shared Product Generation Functions
-# These functions are used for generating product-related HTML elements
-
-# Source utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/utils.sh"
 
-# Generate product card for listings
 generate_product_card() {
     local product="$1"
     local site_data="$2"
@@ -36,7 +31,6 @@ EOF
     fi
 }
 
-# Generate products list
 generate_products_list() {
     local products_data="$1"
     local site_data="$2"
@@ -61,7 +55,6 @@ generate_products_list() {
     echo "    </ul>"
 }
 
-# Generate product detail content for individual product pages
 generate_product_detail_content() {
     local product="$1"
     local site_data="$2"
@@ -74,13 +67,11 @@ generate_product_detail_content() {
     local vat_included=$(get_json_value "$site_data" "vatIncluded" "(VAT Included)")
     local add_to_basket=$(get_json_value "$site_data" "addToBasket" "Add to Basket")
     
-    # Generate long description from longDesc array - FIXED: Handle raw text properly
     local long_desc_html=""
     if echo "$product" | jq -e '.longDesc | type == "array"' > /dev/null 2>&1; then
         local combined_desc=""
         while IFS= read -r desc_line; do
             if [ -n "$desc_line" ]; then
-                # Clean up any control characters and normalize whitespace
                 desc_line=$(echo "$desc_line" | tr -d '\000-\037' | sed 's/[[:space:]]\+/ /g' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
                 if [ -n "$combined_desc" ]; then
                     combined_desc="${combined_desc} $desc_line"
@@ -108,5 +99,4 @@ $long_desc_html    </article>
 EOF
 }
 
-# Export functions for use in other scripts
 export -f generate_product_card generate_products_list generate_product_detail_content

@@ -1,18 +1,13 @@
 #!/bin/bash
 
-# Shared HTML Generation Functions
-# These functions are used across multiple scripts for generating common HTML elements
 
-# Source utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/utils.sh"
 
-# Global variables for current language processing (set by calling script)
 CURRENT_LANG="${CURRENT_LANG:-en}"
 DATA_DIR="${DATA_DIR:-./data}"
 OUTPUT_DIR="${OUTPUT_DIR:-./}"
 
-# Generate logo HTML
 generate_logo() {
     local company_data=$(load_json "company" "$DATA_DIR")
     local slogan=$(get_json_value "$company_data" "slogan" "")
@@ -20,13 +15,11 @@ generate_logo() {
     echo "<img src=\"/logo.jpg\" alt=\"$slogan\" title=\"$slogan\" class=\"logo\" />"
 }
 
-# Generate navigation menu
 generate_navigation() {
     local current_page="$1"
     local site_data=$(load_json "site" "$DATA_DIR")
     local menu_items=""
     
-    # Check if navigation array exists in site.json
     if echo "$site_data" | jq -e '.navigation | type == "array"' > /dev/null 2>&1; then
         while IFS= read -r nav_item; do
             if [ -n "$nav_item" ]; then
@@ -46,7 +39,6 @@ generate_navigation() {
             fi
         done < <(get_json_array "$site_data" "navigation")
     else
-        # Fallback to basic navigation with preserved parameters
         local home_text=$(get_json_value "$site_data" "home" "Home")
         local products_text=$(get_json_value "$site_data" "products" "Products")
         local about_text=$(get_json_value "$site_data" "about" "About")
@@ -74,7 +66,6 @@ generate_navigation() {
     echo -e "$menu_items"
 }
 
-# Generate basket info HTML
 generate_basket_info() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local basket_text=$(get_json_value "$site_data" "basketText" "Basket")
@@ -88,7 +79,6 @@ generate_basket_info() {
 EOF
 }
 
-# Generate basket section HTML
 generate_basket_section() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local basket_warning=$(get_json_value "$site_data" "basketWarning" "Basket functionality")
@@ -105,7 +95,6 @@ generate_basket_section() {
 EOF
 }
 
-# Generate header
 generate_header() {
     local current_page="${1:-home}"
     local company_data=$(load_json "company" "$DATA_DIR")
@@ -143,7 +132,6 @@ $navigation_html        </menu>
 EOF
 }
 
-# Generate footer image section
 generate_footer_image_section() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local company_data=$(load_json "company" "$DATA_DIR")
@@ -168,7 +156,6 @@ generate_footer_image_section() {
 EOF
 }
 
-# Generate footer social section
 generate_footer_social_section() {
     local company_data=$(load_json "company" "$DATA_DIR")
     local company_phone=$(get_json_value "$company_data" "phone" "")
@@ -186,7 +173,6 @@ generate_footer_social_section() {
 EOF
 }
 
-# Generate footer links section
 generate_footer_links_section() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local footer_links=""
@@ -204,7 +190,6 @@ generate_footer_links_section() {
             fi
         done < <(get_json_array "$site_data" "footerLinks")
     else
-        # Fallback footer links with preserved parameters
         local distance_sales=$(get_json_value "$site_data" "distanceSalesAlt" "Distance Sales Agreement")
         local kvkk=$(get_json_value "$site_data" "kvkk" "KVKK")
         local privacy=$(get_json_value "$site_data" "privacyAlt" "Privacy Policy")
@@ -219,12 +204,10 @@ generate_footer_links_section() {
     echo -e "$footer_links"
 }
 
-# Generate page subtitle
 generate_page_subtitle() {
     local page_key="$1"
     local site_data=$(load_json "site" "$DATA_DIR")
     
-    # Don't show subtitle on home page
     if [ "$page_key" = "home" ] || [ "$page_key" = "index" ]; then
         echo ""
         return
@@ -237,7 +220,6 @@ generate_page_subtitle() {
     fi
 }
 
-# Generate footer
 generate_footer() {
     local company_data=$(load_json "company" "$DATA_DIR")
     local site_data=$(load_json "site" "$DATA_DIR")
@@ -273,7 +255,6 @@ $footer_links_section
 EOF
 }
 
-# Generate sitemap links
 generate_sitemap_links() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local links=""
@@ -295,17 +276,14 @@ generate_sitemap_links() {
     echo -e "$links"
 }
 
-# Generate page content from JSON
 generate_page_content() {
     local page_key="$1"
     local site_data=$(load_json "site" "$DATA_DIR")
     local content=""
     
-    # Check if page has content in the pages object
     local page_content=$(echo "$site_data" | jq -r ".pages[\"$page_key\"].content // {}" 2>/dev/null || echo "{}")
     
     if [ "$page_content" != "{}" ] && [ -n "$page_content" ]; then
-        # Handle sections array
         if echo "$page_content" | jq -e '.sections | type == "array"' > /dev/null 2>&1; then
             while IFS= read -r section; do
                 if [ -n "$section" ]; then
@@ -315,19 +293,15 @@ generate_page_content() {
                     local additional_text=$(get_json_value "$decoded_section" "additionalText" "")
                     local list_type=$(get_json_value "$decoded_section" "listType" "ul")
                     
-                    # Add title as h2 element
                     if [ -n "$section_title" ]; then
                         content="${content}            <h2>${section_title}</h2>\n"
                     fi
                     
-                    # Add main text as p element
                     if [ -n "$section_text" ]; then
                         content="${content}            <p>${section_text}</p>\n"
                     fi
                     
-                    # Handle lists (ordered or unordered)
                     if echo "$decoded_section" | jq -e '.list | type == "array"' > /dev/null 2>&1; then
-                        # Determine list type (ul for unordered, ol for ordered)
                         local list_tag="ul"
                         if [ "$list_type" = "ol" ] || [ "$list_type" = "ordered" ]; then
                             list_tag="ol"
@@ -342,7 +316,6 @@ generate_page_content() {
                         content="${content}            </${list_tag}>\n"
                     fi
                     
-                    # Add additional text if present
                     if [ -n "$additional_text" ]; then
                         content="${content}            <p>${additional_text}</p>\n"
                     fi
@@ -354,7 +327,6 @@ generate_page_content() {
     echo -e "$content"
 }
 
-# Export functions for use in other scripts
 export -f generate_logo generate_navigation generate_basket_info generate_basket_section
 export -f generate_header generate_footer_image_section generate_footer_social_section
 export -f generate_footer_links_section generate_page_subtitle generate_footer

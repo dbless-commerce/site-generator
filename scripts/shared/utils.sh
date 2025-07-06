@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Shared utility functions for all build scripts
-# Source this file in other scripts with: source "$(dirname "$0")/shared/utils.sh"
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -12,7 +9,6 @@ PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# Logging functions
 log() { 
     echo -e "${GREEN}[BUILD]${NC} $1" 
 }
@@ -39,17 +35,14 @@ debug() {
     fi
 }
 
-# Progress indicators
 progress() {
     echo -e "${CYAN}[PROGRESS]${NC} $1"
 }
 
-# Configuration
 LANGUAGES=("ar" "tr" "en")
 BASE_DIR="."
 STATIC_DIR="./static"
 
-# Validation functions
 validate_json() {
     local file="$1"
     if [ ! -f "$file" ]; then
@@ -74,7 +67,6 @@ validate_directory() {
     return 0
 }
 
-# JSON loading with proper error handling and validation
 load_json() {
     local file="$1"
     local data_dir="$2"
@@ -87,7 +79,6 @@ load_json() {
     fi
 }
 
-# Safe JSON value extraction
 get_json_value() {
     local json="$1"
     local key="$2"
@@ -96,13 +87,11 @@ get_json_value() {
     echo "$json" | jq -r ".$key // \"$default\"" 2>/dev/null || echo "$default"
 }
 
-# Safe JSON array extraction with special handling for longDesc
 get_json_array() {
     local json="$1"
     local key="$2"
     
     if echo "$json" | jq -e ".$key | type == \"array\"" > /dev/null 2>&1; then
-        # Special handling for longDesc - return raw text instead of base64
         if [ "$key" = "longDesc" ]; then
             echo "$json" | jq -r ".$key[]?" 2>/dev/null || true
         else
@@ -111,7 +100,6 @@ get_json_array() {
     fi
 }
 
-# Directory management
 ensure_directory() {
     local dir="$1"
     if [ ! -d "$dir" ]; then
@@ -135,7 +123,6 @@ clean_directory() {
     fi
 }
 
-# Language processing
 get_language_from_path() {
     local path="$1"
     echo "$path" | sed 's/.*site-$$[^/]*$$.*/\1/'
@@ -151,19 +138,16 @@ is_valid_language() {
     return 1
 }
 
-# File operations
 copy_static_files() {
     local source_dir="$1"
     local target_dir="$2"
     local lang="$3"
     
-    # Copy main static files
     if [ -d "$source_dir" ]; then
         cp -r "$source_dir" "$target_dir/"
         debug "Copied static files from $source_dir to $target_dir"
     fi
     
-    # Copy language-specific static files if they exist
     local lang_static="./site-${lang}/static"
     if [ -d "$lang_static" ]; then
         cp -r "$lang_static/"* "$target_dir/static/" 2>/dev/null || true
@@ -171,7 +155,6 @@ copy_static_files() {
     fi
 }
 
-# Dependency checking
 check_dependencies() {
     local deps=("$@")
     local missing=()
@@ -191,7 +174,6 @@ check_dependencies() {
     return 0
 }
 
-# Performance timing
 start_timer() {
     TIMER_START=$(date +%s)
 }
@@ -203,7 +185,6 @@ end_timer() {
     success "$operation completed in ${duration}s"
 }
 
-# Error handling
 handle_error() {
     local exit_code=$?
     local line_number=$1
@@ -211,13 +192,11 @@ handle_error() {
     exit $exit_code
 }
 
-# Set up error handling
 set_error_handling() {
     set -e
     trap 'handle_error $LINENO' ERR
 }
 
-# Banner functions
 print_banner() {
     local title="$1"
     local width=60
@@ -237,7 +216,6 @@ print_section() {
     echo "$(printf '%*s' ${#title} | tr ' ' '-')"
 }
 
-# Summary functions
 print_summary() {
     local operation="$1"
     shift
