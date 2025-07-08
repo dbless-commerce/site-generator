@@ -1,3 +1,4 @@
+/* Responsive styles - Mobile optimizations */
 @media (max-width: 768px) {
   .bigImg div {
     width: 89%;
@@ -53,21 +54,17 @@
     font-size: 17px;
   }
 
-  menu li img {
-    vertical-align: bottom;
-    padding: 8px;
-    width: 42px;
-    height: 42px;
-  }
-
+  /* Show menu toggle on mobile only */
   .menu-toggle {
     display: block !important;
   }
 
+  /* Hide menu items by default on mobile */
   .menu-item {
     display: none !important;
   }
 
+  /* Show menu items when toggle is open */
   .menu-toggle[data-open="true"] ~ .menu-item {
     display: block !important;
   }

@@ -1,5 +1,7 @@
+/* Layout and main content styles */
 main {
   background: #fff;
+  margin-top: 0;
   padding-top: 8px;
   padding-bottom: 55px;
 }
@@ -8,7 +10,6 @@ article {
   background: #fff;
   padding: 34px;
   text-align: left;
-  border-bottom: 19px solid #ede6db;
 }
 
 article img {
@@ -16,17 +17,18 @@ article img {
   height: 477px;
   object-fit: cover;
   object-position: bottom;
+  margin-top: 13px;
+  margin-bottom: 13px;
   border-radius: 13px;
-  margin: 13px 0;
-}
-
-p {
-  margin-bottom: 15px;
-  padding: 5px;
 }
 
 article p {
   padding-left: 0;
+}
+
+article,
+h3 {
+  border-bottom: 19px solid #ede6db;
 }
 
 article address {
@@ -39,19 +41,4 @@ article a {
   color: #3e8e41;
   margin-bottom: 5px;
   display: block;
-}
-
-h2 {
-  font-weight: bolder;
-  font-size: 17px;
-}
-
-h3 {
-  font-weight: bold;
-  font-style: italic;
-  font-size: 19px;
-  padding: 13px;
-  padding-bottom: 21px;
-  color: #584629;
-  border-bottom: 19px solid #ede6db;
 }

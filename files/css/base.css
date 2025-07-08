@@ -1,4 +1,4 @@
-/* Reset and general layout */
+/* Base styles - Resets and global typography */
 *,
 *::before,
 *::after {
@@ -54,12 +54,63 @@ body {
   height: 100%;
 }
 
+h2 {
+  font-weight: bolder;
+  font-size: 17px;
+}
+
+h3 {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 19px;
+  padding: 13px;
+  padding-bottom: 21px;
+  color: #584629;
+}
+
+p {
+  margin-bottom: 15px;
+  padding: 5px;
+}
+
 button {
   cursor: pointer;
   background-color: #4caf50;
   color: #fff;
-  padding: 13px 21px;
+  padding: 13px;
+  padding-right: 21px;
+  padding-left: 21px;
   border-radius: 13px;
   font-weight: bold;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+strong em {
+  font-size: 13px;
+  font-weight: normal;
+}
+
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 55px;
+  color: #fff;
+}
+
+.list {
+  margin: 21px;
+  margin-top: -13px;
+  margin-bottom: 13px;
+}
+
+.list li {
+  list-style-type: square;
+}
+
+.social {
+  display: inline-flex;
+  justify-content: center;
+  gap: 13px;
 }

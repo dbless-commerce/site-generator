@@ -1,3 +1,4 @@
+/* Footer styles */
 footer {
   background: linear-gradient(to bottom, #4caf50, #3e8e41);
   padding-bottom: 34px;
@@ -9,8 +10,8 @@ footer a {
   color: #fff;
   text-decoration: underline;
   text-underline-offset: 3px;
-  font-size: 13px;
   margin: auto;
+  font-size: 13px;
 }
 
 footer p {
@@ -24,18 +25,17 @@ footer em {
   margin-bottom: 5px;
 }
 
-address {
-  font-style: italic;
-  font-size: 18px;
-  padding: 34px 0 21px;
-  line-height: 1.3;
-  color: #fff;
+footer .bigImg img {
+  object-position: top;
 }
 
-.social {
-  display: inline-flex;
-  justify-content: center;
-  gap: 13px;
+address {
+  font-style: italic;
+  padding-bottom: 21px;
+  padding-top: 34px;
+  font-size: 18px;
+  line-height: 1.3;
+  color: #fff;
 }
 
 .contact {
@@ -51,4 +51,17 @@ address {
 .contact img {
   width: 34px;
   height: 34px;
+  margin-bottom: 0;
+}
+
+#no_wa {
+  color: #fff;
+  font-size: 13px;
+  margin-top: 15px;
+}
+
+#no_wa a {
+  color: #3e8e41;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

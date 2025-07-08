@@ -1,3 +1,14 @@
+/* Header and Navigation styles */
+.logo {
+  cursor: pointer;
+  width: 125px;
+  height: 125px;
+  display: block;
+  border-radius: 50%;
+  margin: 34px auto;
+  margin-bottom: 55px;
+}
+
 nav {
   background: #fff;
   height: 55px;
@@ -11,7 +22,8 @@ menu {
   margin-top: -25px;
   border-radius: 13px;
   display: inline-block;
-  padding: 0 34px;
+  padding-left: 34px;
+  padding-right: 34px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 100;
@@ -23,11 +35,14 @@ menu li {
   margin: 13px;
   color: #584629;
   font-size: 19px;
-  cursor: pointer;
+  font-weight: normal;
+  text-decoration: none;
   text-align: center;
+  cursor: pointer;
   text-underline-offset: 5px;
 }
 
+/* Menu Toggle - Hidden on Desktop */
 .menu-toggle {
   display: none !important;
 }
@@ -36,9 +51,21 @@ menu li {
   display: inline-block !important;
 }
 
+/* Active Page Styling */
 .menu-item.active {
   background: #4caf50;
   color: white !important;
   font-weight: bold;
   border-radius: 8px;
+}
+
+menu li img {
+  vertical-align: bottom;
+  padding: 8px;
+  width: 42px;
+  height: 42px;
+}
+
+menu li.close {
+  display: none;
 }
