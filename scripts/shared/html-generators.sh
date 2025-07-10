@@ -89,7 +89,7 @@ generate_basket_section() {
     <div id="basket">
         <p>$basket_warning</p>
         <button id="btnShowBasket">$show_basket</button>
-        <button id="btnEmptyBasket" style="display: none;">$empty_basket</button>
+        <button id="btnEmptyBasket" class="btn-empty-Basket">$empty_basket</button>
         <ul></ul>
     </div>
 EOF

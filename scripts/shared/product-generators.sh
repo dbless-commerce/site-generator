@@ -82,7 +82,7 @@ generate_product_detail_content() {
         done < <(get_json_array "$product" "longDesc")
         
         if [ -n "$combined_desc" ]; then
-            long_desc_html="            <p style=\"text-align: center; margin: 2rem 0; line-height: 1.8; max-width: 800px; margin-left: auto; margin-right: auto;\">$combined_desc</p>"
+            long_desc_html="            <p class=\"centered-paragraph\">$combined_desc</p>"
         fi
     fi
     

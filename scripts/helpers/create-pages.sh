@@ -45,7 +45,7 @@ generate_404_page() {
 $page_subtitle
         <article>
             <h2>$not_found_title</h2>
-            <img src="/static/img/pages/404.jpg" alt="$not_found_title" style="object-position: center;" />
+            <img src="/static/img/pages/404.jpg" alt="$not_found_title" class=\"centered-image;\" />
             <p>$not_found_message</p>
             <br/>
         </article>
@@ -94,7 +94,7 @@ fi
 $page_subtitle
         <article>
             <h2>$contact_title</h2>
-            <img src="/static/img/pages/iletisim.jpg" alt="$company_name" style="object-position: center;" />
+            <img src="/static/img/pages/iletisim.jpg" alt="$company_name" class=\"centered-image;\" />
             <em>$legal_name</em>
             <br/>
             <div class="contact">
@@ -137,7 +137,7 @@ generate_sitemap_page() {
 $page_subtitle
         <article>
             <h2>$sitemap_title</h2>
-            <img src="/static/img/pages/site-haritasi.jpg" alt="$sitemap_title" style="object-position: bottom;" />
+            <img src="/static/img/pages/site-haritasi.jpg" alt="$sitemap_title" class=\"bottom-image\" />
             <br/>
 $sitemap_links
             <br/>
@@ -166,7 +166,7 @@ generate_home_page() {
     {
         generate_header "home"
         cat << EOF
-    <div class="bigImg" style="margin-top: -48px;">
+    <div class="bigImg" class=\"big-image\">
         <img src="/static/img/pages/header.jpg" alt="$company_slogan">
         <div>
             <em>$head_slogan_start</em>
@@ -264,7 +264,7 @@ generate_static_pages() {
                     local image_tag=""
 
                     if [[ "$page_title" != "Our Products" &&  "$page_title" != "منتجاتنا"  &&  "$page_title" != "Ürünlerimiz"  ]]; then
-                        image_tag="            <img src=\"/static/img/pages/$page_key.jpg\" alt=\"$page_title\" style=\"object-position: center;\" />"
+                        image_tag="            <img src=\"/static/img/pages/$page_key.jpg\" alt=\"$page_title\" class=\"centered-image;\" />"
                     fi
 
                     {
@@ -310,82 +310,6 @@ process_language() {
     return 0
 }
 
-generate_main_index() {
-    log "Generating main language selection index..."
-    
-    cat << 'EOF' > "./index.html"
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Language / Dil Seçin / اختر اللغة</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .language-selector {
-            background: white;
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-        .language-selector h1 {
-            margin-bottom: 2rem;
-            color: #333;
-        }
-        .language-links {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .language-link {
-            display: block;
-            padding: 1rem 2rem;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-        .language-link:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
-        }
-        .flag {
-            font-size: 1.5rem;
-            margin-right: 0.5rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="language-selector">
-        <h1>Select Your Language</h1>
-        <div class="language-links">
-            <a href="./site-en/" class="language-link">
-                <span class="flag">🇺🇸</span>English
-            </a>
-            <a href="./site-tr/" class="language-link">
-                <span class="flag">🇹🇷</span>Türkçe
-            </a>
-            <a href="./site-ar/" class="language-link">
-                <span class="flag">🇸🇦</span>العربية
-            </a>
-        </div>
-    </div>
-</body>
-</html>
-EOF
-}
 
 main() {
     start_timer
@@ -411,22 +335,6 @@ main() {
         fi
     done
     
-    generate_main_index
-    
-    if [ ${#processed_languages[@]} -gt 0 ]; then
-        print_summary "HTML Generation" "${processed_languages[@]}"
-    fi
-    
-    if [ ${#failed_languages[@]} -gt 0 ]; then
-        warn "Failed to process languages: ${failed_languages[*]}"
-    fi
-    
-    end_timer "Multi-language HTML generation"
-    
-    if [ ${#processed_languages[@]} -eq 0 ]; then
-        error "No sites were generated!"
-        exit 1
-    fi
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
