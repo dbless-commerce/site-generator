@@ -1,0 +1,84 @@
+/* Responsive styles - Mobile optimizations */
+@media (max-width: 768px) {
+  .bigImg div {
+    width: 89%;
+  }
+
+  .bigImg button {
+    top: 8px;
+  }
+
+  footer .bigImg button {
+    top: 21px;
+  }
+
+  .bigImg em {
+    font-size: 15px;
+    margin-bottom: 3px;
+  }
+
+  #products {
+    grid-template-columns: 1fr;
+    padding: 34px;
+  }
+
+  #products img {
+    margin-top: 34px;
+    width: 80%;
+  }
+
+  .prd {
+    margin-top: -8px;
+    padding-top: 0;
+    display: inline-block;
+  }
+
+  .prd img {
+    width: 95%;
+    height: 333px;
+  }
+
+  nav {
+    height: auto;
+  }
+
+  menu {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  menu li {
+    display: block;
+    margin: 5px 0;
+    padding: 5px;
+    font-size: 17px;
+  }
+
+  /* Show menu toggle on mobile only */
+  .menu-toggle {
+    display: block !important;
+  }
+
+  /* Hide menu items by default on mobile */
+  .menu-item {
+    display: none !important;
+  }
+
+  /* Show menu items when toggle is open */
+  .menu-toggle[data-open="true"] ~ .menu-item {
+    display: block !important;
+  }
+
+  main h3 {
+    margin-top: -5px;
+    display: inline-block;
+  }
+
+  .btnAddToBasket {
+    margin: 5px;
+  }
+
+  .prd .btnAddToBasket {
+    margin: 13px;
+  }
+}
