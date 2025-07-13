@@ -2,7 +2,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-source "$PARENT_DIR/shared/utils.sh"
+source "$PARENT_DIR/utils/utils.sh"
 
 set_error_handling
 
@@ -10,8 +10,8 @@ set_error_handling
 SOURCE_IMAGES_DIR="files/img/icons"
 SOURCE_PRODUCTS_DIR="files/img/products"
 SOURCE_PAGES_DIR="files/img/pages"
-SOURCE_LOGO="files/branding/logo.jpg"
-SOURCE_FAVICON="files/branding/favicon.png"
+SOURCE_LOGO="files/img/branding/logo.jpg"
+SOURCE_FAVICON="files/img/branding/favicon.png"
 
 validate_source_files() {
     local missing_files=()

@@ -2,7 +2,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-source "$PARENT_DIR/shared/utils.sh"
+source "$PARENT_DIR/utils/utils.sh"
 
 set_error_handling
 

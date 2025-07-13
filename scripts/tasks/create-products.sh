@@ -3,9 +3,9 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 
-source "$PARENT_DIR/shared/utils.sh"
-source "$PARENT_DIR/shared/html-generators.sh"
-source "$PARENT_DIR/shared/product-generators.sh"
+source "$PARENT_DIR/utils/utils.sh"
+source "$PARENT_DIR/generators/html-generators.sh"
+source "$PARENT_DIR/generators/product-generators.sh"
 
 set_error_handling
 

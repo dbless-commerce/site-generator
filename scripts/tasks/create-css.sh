@@ -3,7 +3,7 @@
 # Get script directory and source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-source "$PARENT_DIR/shared/utils.sh"
+source "$PARENT_DIR/utils/utils.sh"
 
 # Set up error handling
 set_error_handling

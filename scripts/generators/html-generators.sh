@@ -1,7 +1,8 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/utils.sh"
+PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+source "$PARENT_DIR/utils/utils.sh"
 
 CURRENT_LANG="${CURRENT_LANG:-en}"
 DATA_DIR="${DATA_DIR:-./data}"
