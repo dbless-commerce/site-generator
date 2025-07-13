@@ -19,7 +19,7 @@
 #basket ul {
   list-style: none;
   padding: 0;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
   margin-top: 45px;
 }
 
@@ -151,6 +151,6 @@ li button img {
   max-height: 100%;
 }
 
-.btn-empty-Basket{
+.btn-empty-Basket {
   display: none;
 }

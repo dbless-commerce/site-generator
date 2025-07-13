@@ -7,11 +7,11 @@ source "$PARENT_DIR/shared/utils.sh"
 set_error_handling
 
 # Configuration
-SOURCE_IMAGES_DIR="files/img"
-SOURCE_PRODUCTS_DIR="files/products"
+SOURCE_IMAGES_DIR="files/img/icons"
+SOURCE_PRODUCTS_DIR="files/img/products"
 SOURCE_PAGES_DIR="files/img/pages"
-SOURCE_LOGO="files/logo.jpg"
-SOURCE_FAVICON="files/favicon.png"
+SOURCE_LOGO="files/branding/logo.jpg"
+SOURCE_FAVICON="files/branding/favicon.png"
 
 validate_source_files() {
     local missing_files=()

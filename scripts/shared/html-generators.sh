@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/utils.sh"
 
@@ -39,19 +38,36 @@ generate_navigation() {
             fi
         done < <(get_json_array "$site_data" "navigation")
     else
+        # Fallback to English defaults if navigation array doesn't exist
         local home_text=$(get_json_value "$site_data" "home" "Home")
         local products_text=$(get_json_value "$site_data" "products" "Products")
         local about_text=$(get_json_value "$site_data" "about" "About")
         local story_text=$(get_json_value "$site_data" "story" "Story")
         local contact_text=$(get_json_value "$site_data" "contact" "Contact")
         
-        local nav_items=(
-            "home:/:$home_text"
-            "urunlerimiz:/urunlerimiz.html:$products_text"
-            "hakkimizda:/hakkimizda.html:$about_text"
-            "lezzetimizin-hikayesi:/lezzetimizin-hikayesi.html:$story_text"
-            "iletisim:/iletisim.html:$contact_text"
-        )
+        # Generate navigation items dynamically based on available pages
+        local nav_items=()
+        
+        # Always include home
+        nav_items+=("home:/:$home_text")
+        
+        # Check if pages exist in site data and add them
+        local pages_data=$(echo "$site_data" | jq -r '.pages // {}' 2>/dev/null)
+        
+        if echo "$pages_data" | jq -e '.products' > /dev/null 2>&1; then
+            nav_items+=("products:/products.html:$products_text")
+        fi
+        
+        if echo "$pages_data" | jq -e '.about' > /dev/null 2>&1; then
+            nav_items+=("about:/about.html:$about_text")
+        fi
+        
+        if echo "$pages_data" | jq -e '.story' > /dev/null 2>&1; then
+            nav_items+=("story:/story.html:$story_text")
+        fi
+        
+        # Always include contact
+        nav_items+=("contact:/contact.html:$contact_text")
         
         for item in "${nav_items[@]}"; do
             IFS=':' read -r key url title <<< "$item"
@@ -127,7 +143,8 @@ generate_header() {
             <li class="menu-toggle" data-open="false" onclick="toggleMenu(this)">
                 <img src="/static/img/menu.png" alt="$menu_text" />
             </li>
-$navigation_html        </menu>
+$navigation_html
+        </menu>
     </nav>
 EOF
 }
@@ -136,10 +153,10 @@ generate_footer_image_section() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local company_data=$(load_json "company" "$DATA_DIR")
     
-    local footer_slogan_start=$(get_json_value "$site_data" "footImgSloganStart" "")
-    local footer_slogan_end=$(get_json_value "$site_data" "footImgSloganEnd" "")
-    local footer_button=$(get_json_value "$site_data" "footSloganBtn" "More")
-    local footer_link=$(get_json_value "$site_data" "footSloganLnk" "#")
+    local footer_slogan_start=$(get_json_value "$site_data" "footerSloganStart" "")
+    local footer_slogan_end=$(get_json_value "$site_data" "footerSloganEnd" "")
+    local footer_button=$(get_json_value "$site_data" "footerButton" "More")
+    local footer_link=$(get_json_value "$site_data" "footerLink" "#")
     local company_slogan=$(get_json_value "$company_data" "slogan" "")
     
     cat << EOF
@@ -190,15 +207,16 @@ generate_footer_links_section() {
             fi
         done < <(get_json_array "$site_data" "footerLinks")
     else
-        local distance_sales=$(get_json_value "$site_data" "distanceSalesAlt" "Distance Sales Agreement")
+        # Fallback to English defaults
+        local distance_sales=$(get_json_value "$site_data" "distanceSales" "Distance Sales Agreement")
         local kvkk=$(get_json_value "$site_data" "kvkk" "KVKK")
-        local privacy=$(get_json_value "$site_data" "privacyAlt" "Privacy Policy")
+        local privacy=$(get_json_value "$site_data" "privacy" "Privacy Policy")
         local sitemap=$(get_json_value "$site_data" "sitemap" "Site Map")
         
-        footer_links="        <a href=\"javascript:preserveBasketNavigation('/satis-sozlesmesi.html')\">$distance_sales</a>\n"
+        footer_links="        <a href=\"javascript:preserveBasketNavigation('/distance-sales-agreement.html')\">$distance_sales</a>\n"
         footer_links="${footer_links}        <a href=\"javascript:preserveBasketNavigation('/kvkk.html')\">$kvkk</a>\n"
-        footer_links="${footer_links}        <a href=\"javascript:preserveBasketNavigation('/gizlilik-politikasi.html')\">$privacy</a>\n"
-        footer_links="${footer_links}        <a href=\"javascript:preserveBasketNavigation('/site-haritasi.html')\">$sitemap</a>\n"
+        footer_links="${footer_links}        <a href=\"javascript:preserveBasketNavigation('/privacy-policy.html')\">$privacy</a>\n"
+        footer_links="${footer_links}        <a href=\"javascript:preserveBasketNavigation('/site-map.html')\">$sitemap</a>\n"
     fi
     
     echo -e "$footer_links"

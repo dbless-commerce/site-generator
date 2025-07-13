@@ -70,40 +70,46 @@ generate_contact_page() {
     local phone=$(get_json_value "$company_data" "phone" "")
     local phone_clean=$(echo "$phone" | tr -d ' ')
     local email=$(get_json_value "$company_data" "email" "")
-    local map_link=$(get_json_value "$company_data" "mapLink" "https://maps.app.goo.gl/4mFyGQx7jfX2S2vh7")
-    local page_subtitle=$(generate_page_subtitle "iletisim")
-    
-local address_block=""
-if echo "$company_data" | jq -e '.address | type == "array"' > /dev/null 2>&1; then
-    while IFS= read -r line; do
-        if [ -n "$line" ]; then
-            # decode base64 before appending
-            decoded_line=$(echo "$line" | base64 --decode)
-            address_block="${address_block}                    ${decoded_line}<br/>"
-        fi
-    done < <(get_json_array "$company_data" "address")
-fi
+    local map_link=$(get_json_value "$company_data" "mapLink" "")
+    local page_subtitle=$(generate_page_subtitle "contact")
+    local address_block=""
 
+    # Build address block
+    if echo "$company_data" | jq -e '.address | type == "array"' > /dev/null 2>&1; then
+        while IFS= read -r line; do
+            if [ -n "$line" ]; then
+                # decode base64 before appending
+                decoded_line=$(echo "$line" | base64 --decode)
+                address_block="${address_block}                    ${decoded_line}<br/>"
+            fi
+        done < <(get_json_array "$company_data" "address")
+    fi
+    
+    # Generate map link section only if map_link is not empty
+    local map_section=""
+    if [ -n "$map_link" ] && [ "$map_link" != "" ]; then
+        map_section="                <br/>
+                <img src=\"/static/img/map.png\" alt=\"map\" />
+                <a href=\"$map_link\" target=\"_blank\">$map_text</a>"
+    fi
     
     local products_list=$(generate_products_list "$products_data" "$site_data" 4 true)
     
     {
-        generate_header "iletisim"
+        generate_header "contact"
         cat << EOF
     <main>
 $page_subtitle
         <article>
             <h2>$contact_title</h2>
-            <img src="/static/img/pages/iletisim.jpg" alt="$company_name" class=\"centered-image;\" />
+            <img src="/static/img/pages/contact.jpg" alt="$company_name" class="centered-image;" />
             <em>$legal_name</em>
             <br/>
             <div class="contact">
                 <img src="/static/img/address.png" alt="address" />
                 <address>
-$address_block                </address>
-                <br/>
-                <img src="/static/img/map.png" alt="map" />
-                <a href="$map_link" target="_blank">$map_text</a>
+$address_block
+                </address>$map_section
                 <br/>
                 <img src="/static/img/phone.png" alt="phone" />
                 <a href="tel:$phone_clean">$phone</a>
@@ -116,7 +122,7 @@ $products_list
     </main>
 EOF
         generate_footer
-    } > "$OUTPUT_DIR/iletisim.html"
+    } > "$OUTPUT_DIR/contact.html"
 }
 
 generate_sitemap_page() {
@@ -128,16 +134,16 @@ generate_sitemap_page() {
     local sitemap_title=$(get_json_value "$site_data" "sitemap" "Site Map")
     local sitemap_links=$(generate_sitemap_links)
     local products_list=$(generate_products_list "$products_data" "$site_data" 4 true)
-    local page_subtitle=$(generate_page_subtitle "site-haritasi")
+    local page_subtitle=$(generate_page_subtitle "site-map")
     
     {
-        generate_header "site-haritasi"
+        generate_header "site-map"
         cat << EOF
     <main>
 $page_subtitle
         <article>
             <h2>$sitemap_title</h2>
-            <img src="/static/img/pages/site-haritasi.jpg" alt="$sitemap_title" class=\"bottom-image\" />
+            <img src="/static/img/pages/site-map.jpg" alt="$sitemap_title" class="bottom-image" />
             <br/>
 $sitemap_links
             <br/>
@@ -146,7 +152,7 @@ $products_list
     </main>
 EOF
         generate_footer
-    } > "$OUTPUT_DIR/site-haritasi.html"
+    } > "$OUTPUT_DIR/site-map.html"
 }
 
 generate_home_page() {
@@ -157,22 +163,22 @@ generate_home_page() {
     log "Generating home page for $CURRENT_LANG..."
     
     local company_slogan=$(get_json_value "$company_data" "slogan" "")
-    local head_slogan_start=$(get_json_value "$site_data" "headImgSloganStart" "")
-    local head_slogan_end=$(get_json_value "$site_data" "headImgSloganEnd" "")
-    local head_link=$(get_json_value "$site_data" "headSloganLnk" "#")
-    local head_button=$(get_json_value "$site_data" "headSloganBtn" "More")
+    local header_slogan_start=$(get_json_value "$site_data" "headerSloganStart" "")
+    local header_slogan_end=$(get_json_value "$site_data" "headerSloganEnd" "")
+    local header_link=$(get_json_value "$site_data" "headerLink" "#")
+    local header_button=$(get_json_value "$site_data" "headerButton" "More")
     local products_list=$(generate_products_list "$products_data" "$site_data" 4 true)
     
     {
         generate_header "home"
         cat << EOF
-    <div class="bigImg" class=\"big-image\">
+    <div class="bigImg" class="big-image">
         <img src="/static/img/pages/header.jpg" alt="$company_slogan">
         <div>
-            <em>$head_slogan_start</em>
-            <em>$head_slogan_end</em>
-            <button onclick="window.location.href='$head_link' + window.location.search">
-                $head_button
+            <em>$header_slogan_start</em>
+            <em>$header_slogan_end</em>
+            <button onclick="window.location.href='$header_link' + window.location.search">
+                $header_button
             </button>
         </div>
     </div>
@@ -193,10 +199,10 @@ generate_products_page() {
     
     local company_slogan=$(get_json_value "$company_data" "slogan" "")
     local products_list=$(generate_products_list "$products_data" "$site_data" 999 true)
-    local page_subtitle=$(generate_page_subtitle "urunlerimiz")
+    local page_subtitle=$(generate_page_subtitle "products")
     
     {
-        generate_header "urunlerimiz"
+        generate_header "products"
         cat << EOF
     <main>
 $page_subtitle
@@ -205,7 +211,7 @@ $products_list
     </main>
 EOF
         generate_footer
-    } > "$OUTPUT_DIR/urunlerimiz.html"
+    } > "$OUTPUT_DIR/products.html"
 }
 
 generate_product_pages() {
@@ -247,26 +253,27 @@ EOF
 generate_static_pages() {
     local site_data=$(load_json "site" "$DATA_DIR")
     local products_data=$(load_json "products" "$DATA_DIR")
-
+    
     log "Generating static pages for $CURRENT_LANG..."
-
+    
     if echo "$site_data" | jq -e '.pages | type == "object"' > /dev/null 2>&1; then
         while IFS= read -r page_key; do
-            if [ -n "$page_key" ] && [ "$page_key" != "index" ] && [ "$page_key" != "iletisim" ] && [ "$page_key" != "site-haritasi" ] && [ "$page_key" != "404" ]; then
+            if [ -n "$page_key" ] && [ "$page_key" != "index" ] && [ "$page_key" != "contact" ] && [ "$page_key" != "site-map" ] && [ "$page_key" != "404" ] && [ "$page_key" != "products" ]; then
                 local page_data=$(echo "$site_data" | jq -r ".pages[\"$page_key\"] // {}" 2>/dev/null || echo "{}")
                 local title=$(get_json_value "$page_data" "title" "")
-
+                
                 if [ -n "$title" ]; then
                     local page_title=$(echo "$title" | cut -d'|' -f1 | xargs)
                     local page_content=$(generate_page_content "$page_key")
                     local products_list=$(generate_products_list "$products_data" "$site_data" 4 true)
                     local page_subtitle=$(generate_page_subtitle "$page_key")
                     local image_tag=""
-
-                    if [[ "$page_title" != "Our Products" &&  "$page_title" != "منتجاتنا"  &&  "$page_title" != "Ürünlerimiz"  ]]; then
+                    
+                    # Don't show image for products pages
+                    if [[ "$page_title" != "Our Products" && "$page_title" != "Products" ]]; then
                         image_tag="            <img src=\"/static/img/pages/$page_key.jpg\" alt=\"$page_title\" class=\"centered-image;\" />"
                     fi
-
+                    
                     {
                         generate_header "$page_key"
                         cat << EOF
@@ -310,7 +317,6 @@ process_language() {
     return 0
 }
 
-
 main() {
     start_timer
     
@@ -334,7 +340,6 @@ main() {
             failed_languages+=("$lang")
         fi
     done
-    
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

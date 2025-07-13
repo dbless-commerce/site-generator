@@ -6,7 +6,7 @@ source "$PARENT_DIR/shared/utils.sh"
 
 set_error_handling
 
-JS_SOURCE_FILE="programmatic/main.js"
+JS_SOURCE_FILE="files/js/main.js"
 OUTPUT_JS_NAME="site.js"
 STATIC_DIR_NAME="static"
 
