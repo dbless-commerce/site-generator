@@ -15,17 +15,38 @@ This project is a **database-free eCommerce site generator** that uses **WhatsAp
 
 ## 📁 Project Structure
 
-```
-site-generator/
-├── .vscode/            # VSCode config
-├── files/              # JSON data & images
-├── scripts/            # Automation scripts
-├── site-tr/            # Turkish site (submodule)
-├── site-ar/            # Arabic site (submodule)
-├── site-en/            # English site (submodule)
-├── .gitmodules         # Git submodule configs
-├── LICENSE             # License info
-└── README.md           # Project overview
+```plaintext
+SITE-GENERATOR/
+├── files/                       # Static assets used by the generated sites
+│   ├── css/                     # Global CSS styles
+│   ├── img/                     # Images and icons
+│   └── js/                      # JavaScript files
+│
+├── scripts/                     # All automation scripts
+│   ├── core/                    # Core scripts to build & deploy sites
+│   │   ├── generate.sh          # Main generation script
+│   │   └── push-sites.sh        # Deploy/push sites to the server or repo
+│   │
+│   ├── generators/              # Generators for specific content
+│   │   ├── html-generators.sh   # Generates HTML pages
+│   │   └── product-generators.sh# Generates product-related pages/content
+│   │
+│   ├── tasks/                   # Utility tasks for building assets
+│   │   ├── copy-images.sh       # Copies images to the build folder
+│   │   ├── create-css.sh        # Builds/merges CSS files
+│   │   ├── create-pages.sh      # Creates static pages
+│   │   ├── create-products.sh   # Creates product pages
+│   │   └── merge-js.sh          # Merges and processes JS functionality
+│   │
+│   └── utils/                   # Helper functions for scripts
+│       └── utils.sh             # Common shell utilities
+│
+├── site-ar/                     # Generated site content in Arabic
+├── site-en/                     # Generated site content in English
+├── site-tr/                     # Generated site content in Turkish
+│
+└── .editorconfig                # Editor configuration for consistent coding style
+└── .gitmodules                  # Git submodules configuration
 ```
 
 ---
@@ -34,75 +55,122 @@ site-generator/
 
 ### 🧩 Language Submodules
 
-Each language version is a separate GitHub repository, added as a Git submodule to this main generator repo. This allows you to:
+Each language version is a separate GitHub repository, added as a Git submodule to this main generator repo.
 
 - Host different language sites at different subdomains (`tr.example.com`, `en.example.com`, etc.)
-- Manage content in isolation while sharing a common structure
+- Manage content in isolation while sharing a common structure.
 
-### ⚙️ Data Management
+📖 [Learn more about Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
 
-Located in the `files/` directory:
+⚠️ **Why initialize submodules?**  
+Because the language folders (`site-ar`, `site-en`, `site-tr`) are *not* regular folders but linked repositories.  
+Without initializing, they will be empty placeholders.
 
-- `site.json`: Site-wide configuration (e.g., branding, layout).
-- `product.json`: Product listings.
+```bash
+git submodule update --init --recursive
+```
 
-To update content:
+📖 [GitHub Pages documentation](https://docs.github.com/en/pages)
 
-1. Edit the JSON files.
-2. Run the update script (see below).
+---
+
+## 🛒 Order Flow
+
+```mermaid
+sequenceDiagram
+    participant Customer
+    participant Website
+    participant WhatsApp
+    participant Admin
+
+    Customer->>Website: Browse products
+    Customer->>Website: Add product to cart
+    Website->>WhatsApp: Generate order message link
+    Customer->>WhatsApp: Send order via WhatsApp
+    WhatsApp->>Admin: Receive order message
+    Admin->>Customer: Confirm and process order
+```
+
+---
+
+## ➕ Adding New Content
+
+### 🆕 Product JSON Structure
+
+```jsonc
+{
+  "id": "p500",                 // Unique product ID
+  "name": "Erzincan Tulum",     // Product name
+  "url": "erzincan-tulum",      // URL slug
+  "price": 210,                 // Price
+  "currency": "USD",            // Currency code
+  "shortDesc": "Short desc",    // Short description for cards
+  "metaDesc": "Meta desc",      // SEO meta description
+  "keywords": "cheese, organic",// SEO keywords
+  "image": "/static/img/products/erzincan-tulum.jpg", // Main image path
+  "weight": "500g",             // Weight or package size
+  "category": "cheese",         // Product category
+  "featured": true,             // Show on homepage?
+  "inStock": true               // Availability
+}
+```
+
+Add your product in `site-<lang>/data/product.json` then run:
+
+```bash
+./scripts/core/generate.sh
+```
+
+---
+
+### 🌍 Add a New Language
+
+1. Create a new repo for the language (e.g., `site-fr`).
+2. Add it as a submodule:
+```bash
+git submodule add <repo-url> site-fr
+```
+3. Create the data/ folder inside the new language repo and add the required JSON files:
+site-fr/
+└── data/
+    ├── company.json    # Company/site metadata
+    ├── site.json       # General site configuration
+    └── product.json    # Product listings
+
+4. Translate content in the JSON files to the new language.
+
+5. Run the generator script to build the site:
+
+```bash
+./scripts/core/generate.sh
+```
+---
+
+### 📄 Add a New Page
+
+1. Update `site-<lang>/data/site.json`
+2. Add a new page entry
+3. Run:
+```bash
+./scripts/create-pages.sh
+```
 
 ---
 
 ## 🚀 Generate & Deploy Sites
 
-To build and update all language sites:
-
+### 🔨 Generate Sites
 ```bash
-./scripts/generate.sh
+./scripts/core/generate.sh
 ```
+- Reads from `site.json`, `company.json`, and `product.json`
+- Generates static pages for all languages.
 
-This script will:
-
-- Read from `site.json`, `company, json`and `product.json`
-- Generate static pages for each language
-
-To build and update all language sites:
-
+### 📤 Deploy Sites
 ```bash
-./scripts/push-sites.sh
+./scripts/core/push-sites.sh
 ```
-This script will:
-- Commit and push updates to each submodule
-
-> ⚠️ Make sure your submodules are initialized before running this!
-
----
-
-## 🧠 Client-Side Functionality
-
-The `programmatic/` folder (within each language site) includes:
-
-- Shopping basket logic
-- WhatsApp integration
-- UI interactivity for a seamless user experience
-
-These scripts are included automatically when you generate the sites.
-
----
-
-## 🖼️ Image Organization
-
-All images are managed under the `files/` directory with clear conventions:
-
-- **Product Images:**  
-  `files/products/`  
-  Match image filenames to product names.
-
-- **Page Images:**  
-  `files/img/pages/`  
-  Match image filenames to page titles.
-
-> 📝 **Note:** File names must match exactly to avoid display errors.
+- Commits and pushes updates to each submodule repo.
 
 ---
 
@@ -133,5 +201,3 @@ This project is licensed under the [MIT License](./LICENSE).
 ## 📬 Contributions
 
 Feel free to open issues or PRs to improve the generator or add new features.
-
----
