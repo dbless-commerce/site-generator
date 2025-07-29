@@ -206,7 +206,6 @@ generate_products_page() {
         cat << EOF
     <main>
 $page_subtitle
-        <h3>$company_slogan</h3>
 $products_list
     </main>
 EOF
