@@ -17,7 +17,7 @@ This project is a **database-free eCommerce site generator** that uses **WhatsAp
 
 ```plaintext
 SITE-GENERATOR/
-├── generate.sh                  # Main generation script
+├── generate-all.sh              # Main generation script
 ├── files/                       # Static assets used by the generated sites
 │   ├── css/                     # Global CSS styles
 │   ├── img/                     # Images and icons
@@ -37,7 +37,7 @@ SITE-GENERATOR/
 │   │
 │   └── utils/                   # Helper functions for scripts
 │       └── utils.sh             # Common shell utilities
-|       └── push-sites.sh        # Deploy/push sites to the server or repo
+│       └── push-sites.sh        # Deploy/push sites to the server or repo
 │
 ├── site-ar/                     # Generated site content in Arabic
 ├── site-en/                     # Generated site content in English
@@ -80,14 +80,76 @@ sequenceDiagram
     participant Website
     participant WhatsApp
     participant Admin
+    participant TrackingNotebook
 
     Customer->>Website: Browse products
     Customer->>Website: Add product to cart
     Website->>WhatsApp: Generate order message link
     Customer->>WhatsApp: Send order via WhatsApp
     WhatsApp->>Admin: Receive order message
-    Admin->>Customer: Confirm and process order
+    Admin->>TrackingNotebook: Generate reference number
+    Admin->>TrackingNotebook: Store customer address
+    Admin->>Customer: Confirm order with reference number
 ```
+
+---
+
+## 📝 Managing Page Content
+
+All text and configuration for each language site are stored in the `data/site.json` file inside the respective language folder (`site-ar`, `site-en`, `site-tr`).
+
+- **Static text** (homepage content, about page, etc.) is stored as key/value pairs.
+- **Images** are stored in `files/img/` and referenced in JSON files.
+- **Admin editing**: These JSON files can be updated directly in GitHub, or through a planned admin interface for non-technical editors.
+
+---
+
+## 📒 Order Tracking Notebook
+
+For every order:
+
+1. The admin assigns a **Reference Number** to the customer’s address in chat.
+2. The customer’s **address** and order details are stored in a simple tracking notebook (JSON or CSV) for future reference and repeat sales.
+
+Example structure (`tracking-notebook.json`):
+
+```json
+[
+  {
+    "referenceNumber": "REF-20250805-01",
+    "customerName": "Ali Ahmad",
+    "address": "Gaza City, Palestine",
+    "orderDetails": [
+      {"productId": "p500", "quantity": 2}
+    ],
+    "status": "Pending"
+  }
+]
+```
+
+---
+
+## 💰 Product Price & Shipping Cost
+
+- **Current prices** are stored in `product.json` for each language site.
+- **Shipping costs** are stored in `data/shipping.json` in each language site.
+
+Since these values change frequently, maintain a **history** in a separate file:
+
+Example (`price-history.json`):
+
+```json
+[
+  {
+    "productId": "p500",
+    "date": "2025-08-01",
+    "price": 210,
+    "shippingCost": 20
+  }
+]
+```
+
+This allows you to track changes over time and adjust pricing easily.
 
 ---
 
@@ -97,26 +159,26 @@ sequenceDiagram
 
 ```jsonc
 {
-  "id": "p500",                 // Unique product ID
-  "name": "Erzincan Tulum",     // Product name
-  "url": "erzincan-tulum",      // URL slug
-  "price": 210,                 // Price
-  "currency": "USD",            // Currency code
-  "shortDesc": "Short desc",    // Short description for cards
-  "metaDesc": "Meta desc",      // SEO meta description
-  "keywords": "cheese, organic",// SEO keywords
-  "image": "/static/img/products/erzincan-tulum.jpg", // Main image path
-  "weight": "500g",             // Weight or package size
-  "category": "cheese",         // Product category
-  "featured": true,             // Show on homepage?
-  "inStock": true               // Availability
+  "id": "p500",
+  "name": "Erzincan Tulum",
+  "url": "erzincan-tulum",
+  "price": 210,
+  "currency": "USD",
+  "shortDesc": "Short desc",
+  "metaDesc": "Meta desc",
+  "keywords": "cheese, organic",
+  "image": "/static/img/products/erzincan-tulum.jpg",
+  "weight": "500g",
+  "category": "cheese",
+  "featured": true,
+  "inStock": true
 }
 ```
 
 Add your product in `site-<lang>/data/product.json` then run:
 
 ```bash
-./scripts/core/generate.sh
+./generate-all.sh
 ```
 
 ---
@@ -128,20 +190,13 @@ Add your product in `site-<lang>/data/product.json` then run:
 ```bash
 git submodule add <repo-url> site-fr
 ```
-3. Create the data/ folder inside the new language repo and add the required JSON files:
-site-fr/
-└── data/
-    ├── company.json    # Company/site metadata
-    ├── site.json       # General site configuration
-    └── product.json    # Product listings
-
+3. Create the data/ folder inside the new language repo and add the required JSON files.
 4. Translate content in the JSON files to the new language.
-
 5. Run the generator script to build the site:
-
 ```bash
-./scripts/core/generate.sh
+./generate-all.sh
 ```
+
 ---
 
 ### 📄 Add a New Page
@@ -150,25 +205,20 @@ site-fr/
 2. Add a new page entry
 3. Run:
 ```bash
-./scripts/create-pages.sh
+./scripts/tasks/create-pages.sh
 ```
 
 ---
 
-## 🚀 Generate & Deploy Sites
+## 🚀 Build & Deploy in One Step
 
-### 🔨 Generate Sites
-```bash
-./scripts/core/generate.sh
-```
-- Reads from `site.json`, `company.json`, and `product.json`
-- Generates static pages for all languages.
+Instead of running separate generate and deploy commands, use:
 
-### 📤 Deploy Sites
 ```bash
-./scripts/core/push-sites.sh
+./scripts/utils/push-sites.sh
 ```
-- Commits and pushes updates to each submodule repo.
+
+This will generate all sites and deploy them to their respective submodules in one go.
 
 ---
 
@@ -185,7 +235,7 @@ git submodule update --init --recursive
 After making changes to JSON files or static content:
 
 ```bash
-./scripts/update.sh
+./generate-all.sh
 ```
 
 ---
