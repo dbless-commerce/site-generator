@@ -17,16 +17,13 @@ This project is a **database-free eCommerce site generator** that uses **WhatsAp
 
 ```plaintext
 SITE-GENERATOR/
+├── generate.sh                  # Main generation script
 ├── files/                       # Static assets used by the generated sites
 │   ├── css/                     # Global CSS styles
 │   ├── img/                     # Images and icons
 │   └── js/                      # JavaScript files
 │
 ├── scripts/                     # All automation scripts
-│   ├── core/                    # Core scripts to build & deploy sites
-│   │   ├── generate.sh          # Main generation script
-│   │   └── push-sites.sh        # Deploy/push sites to the server or repo
-│   │
 │   ├── generators/              # Generators for specific content
 │   │   ├── html-generators.sh   # Generates HTML pages
 │   │   └── product-generators.sh# Generates product-related pages/content
@@ -40,6 +37,7 @@ SITE-GENERATOR/
 │   │
 │   └── utils/                   # Helper functions for scripts
 │       └── utils.sh             # Common shell utilities
+|       └── push-sites.sh        # Deploy/push sites to the server or repo
 │
 ├── site-ar/                     # Generated site content in Arabic
 ├── site-en/                     # Generated site content in English
