@@ -305,6 +305,45 @@ function getTotals() {
   return { total, qp, w };
 }
 
+
+async function loadShippingAndCalculate(BASKET, shippingMethodId = "standard") {
+  const res = await fetch('../data/shippingData.json');
+  const shippingData = await res.json();
+
+  let productTotal = 0;
+  let totalWeight = 0;
+  const qp = [];
+
+  BASKET.forEach(p => {
+    qp.push(`${p.id}=${p.quantity}`);
+    productTotal += p.price * p.quantity;
+
+    const numPart = Number.parseInt(p.id.replace(/\D/g, ""), 10);
+    totalWeight += (numPart / 1000) * p.quantity;
+  });
+
+  const method = shippingData.methods.find(m => m.id === shippingMethodId);
+
+  let extraCost = 0;
+  for (let rule of shippingData.rules) {
+    if (totalWeight <= rule.maxWeightKg) {
+      extraCost = rule.extraCost;
+      break;
+    }
+  }
+
+  let shippingCost = (totalWeight >= shippingData.freeShippingWeightKg) ? 0 : method.baseCost + extraCost;
+  const grandTotal = productTotal + shippingCost;
+
+  return {
+    productTotal,
+    shippingCost,
+    grandTotal,
+    totalWeight,
+    qp
+  };
+}
+
 function doProductInner($p, prd, isLinked) {
   const $img = img("", prd.name);
   $img.src = "/static/img/products/" + prd.url + ".jpg";
