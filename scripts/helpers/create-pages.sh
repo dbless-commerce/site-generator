@@ -21,7 +21,7 @@ generate_html() {
 <body>
   <div id="loading">loading...</div>
   <footer></footer>
-  <script src="/site.js"></script>
+  <script src="static/site.js"></script>
 </body>
 </html>
 EOF
@@ -31,6 +31,7 @@ folders=$(find . -maxdepth 1 -type d -name 'site-*' -printf '%P\n')
 for folder in $folders; do
     
     lang="${folder##*-}"
+    echo "Processing folder: $folder with language: $lang"
 
     echo "Processing folder: $folder with language: $lang"
 

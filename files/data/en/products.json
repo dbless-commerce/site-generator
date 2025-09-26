@@ -1,0 +1,86 @@
+{
+  "products": [
+    {
+      "id": "p500",
+      "name": "Erzincan Tulum Cheese 500g",
+      "url": "erzincan-tulum-peyniri-500gr",
+      "price": 210,
+      "shortDesc": "Erzincan’s unique tulum cheese now comes in a more practical 500g pack. Add a distinctive touch to your table with its natural and intense flavor.",
+      "metaDesc": "With its sharp aroma and creamy texture, Erzincan tulum cheese is a century-old delicacy with a geographical indication.",
+      "keywords": "Erzincan tulum cheese, geographically indicated cheese, 500g tulum cheese, traditional cheese, Munzur Mountains cheese, organic cheese, natural fermentation, Özüm'le food, Anatolian flavor, probiotic cheese",
+      "longDesc": [
+        "Erzincan tulum cheese is made from fresh milk of animals grazing on the foothills of the Munzur Mountains and is protected by geographical indication certification.",
+        "Its distinct aroma is developed through a maturing process inside goatskin sacks for 3-6 months and storing in natural caves.",
+        "Each bite offers an unforgettable experience with its creamy texture and slightly tangy aftertaste.",
+        "No preservatives or additives are used in its production; it is completely natural, organic, and authentic.",
+        "Seasonal variations add slight differences to each batch, making it a true artisanal product.",
+        "Reflecting the lifestyle of local communities, this cheese has recently drawn the attention of world-renowned chefs.",
+        "Rich in protein, calcium, and healthy fatty acids, it is not only delicious but also nutritious.",
+        "For the best experience, serve at room temperature and pair with toasted bread, fresh fruits, or honey.",
+        "The microflora developed during maturation provides probiotic benefits that support digestion.",
+        "The 500g pack is ideal for table use and special recipes; store in the refrigerator wrapped in a damp cloth."
+      ]
+    },
+    {
+      "id": "p1000",
+      "name": "Erzincan Tulum Cheese 1kg",
+      "url": "erzincan-tulum-peyniri-1000gr",
+      "price": 420,
+      "shortDesc": "An authentic flavor matured in goatskin, carrying a thousand-year-old tradition to your modern table with its aromatic and bold character.",
+      "metaDesc": "Experience the full-bodied taste of Erzincan tulum cheese made from the milk of animals nourished by endemic plants of the Munzur Mountains, in a full 1kg portion.",
+      "keywords": "Erzincan tulum cheese, 1kg tulum cheese, Slow Food, goatskin matured cheese, Anatolian cheese culture, artisanal product, Özüm'le food, gourmet cheese, naturally aged",
+      "longDesc": [
+        "With a history of a thousand years, Erzincan tulum cheese is one of the most valuable examples of Anatolia’s ancient cheese tradition.",
+        "Each kilogram requires about 6–7 liters of milk, which explains its intense flavor profile.",
+        "The cheese curd is kneaded by hand and aged in goatskin sacks crafted by skilled artisans.",
+        "Maturation time varies by season; winter cheese takes longer to mature and has a stronger character.",
+        "Tulum cheeses produced at different altitudes show unique qualities that can be distinguished by tasting experts.",
+        "The 1kg format is ideal for hosting guests or long-term use; once opened, it stays fresh for weeks.",
+        "Recognized and protected by the international Slow Food movement, this cheese is a craft passed down through generations.",
+        "Pairing with dried fruits, walnuts, and honeyed mixtures helps balance its complex aromas.",
+        "In addition to traditional breakfast tables, it can be used in gourmet sandwiches, pasta, and special risotto recipes.",
+        "By purchasing this product, you support the sustainable economy of local producers and help preserve cultural heritage."
+      ]
+    },
+    {
+      "id": "yt900",
+      "name": "Salted Butter 900g",
+      "url": "tuzlu-tereyagi-900gr",
+      "price": 400,
+      "shortDesc": "From breakfast to your meals, Özüm'le Salted Butter delivers lasting flavor in every bite.",
+      "metaDesc": "Blended with sea salt ground in stone mills, this traditionally crafted real butter adds depth to every dish it touches.",
+      "keywords": "Salted butter, cooking butter, churned butter, rock salt butter, traditional butter, 900g butter, Anatolian cuisine, pastry butter, Özüm'le butter, naturally fermented",
+      "longDesc": [
+        "Made from fresh milk of free-grazing animals on lush green plateaus, without industrial machinery.",
+        "After the cream is naturally separated from the milk, it is churned for hours in traditional wooden churns made from oak.",
+        "The natural fermentation process gives the butter its characteristic tang and complex aroma profile.",
+        "Its lightly salted formula is perfectly balanced for both cooking and spreading on bread.",
+        "Contains short- and medium-chain fatty acids and omega-3s that help raise HDL (good) cholesterol levels.",
+        "The rock salt used not only preserves the butter naturally but also adds an extra layer of flavor through its minerals.",
+        "This 900g pack provides enough quantity for preparing rich pilafs, pastries, and meat dishes of Anatolian cuisine.",
+        "Shaped using traditional wooden molds, the butter can stay fresh up to 6 months in the fridge or up to 1 year in the freezer."
+      ]
+    },
+    {
+      "id": "y500",
+      "name": "Unsalted Butter 500g",
+      "url": "tuzsuz-tereyagi-500gr",
+      "price": 200,
+      "shortDesc": "Özüm'le Pasteurized Unsalted Butter is the perfect choice for dishes and pastries, offering a balanced, pure flavor.",
+      "metaDesc": "Free of additives, this premium unsalted butter is ideal for everything from French-style pastries to Turkish baklava.",
+      "keywords": "Unsalted butter, pastry butter, baklava butter, patisserie butter, creamy butter, pure butter, 500g butter, Özüm'le butter, natural cream, premium butter",
+      "longDesc": [
+        "Made from carefully selected high-quality milk.",
+        "Contains no preservatives, stabilizers, or emulsifiers; made purely by churning 100% natural cream.",
+        "Its unsalted formula highlights pure butter flavor in delicate desserts, creamy sauces, and specialty baked goods.",
+        "From French croissants to Turkish baklava, its crystallization properties ensure perfect results in layered pastries.",
+        "Its sweet creamy taste and silky soft texture offer a luxurious spread for breakfast breads.",
+        "Melts easily even at low temperatures, providing a smooth mixture — ideal for delicate sauces like hollandaise and béarnaise.",
+        "In sweet creations such as chocolate ganache, caramel, and creams, its pure butter aroma adds rich depth.",
+        "Rich in vitamins A, D, E, and K, which are fat-soluble and easily absorbed by the body.",
+        "The 500g compact packaging is near perfect for both home use and small-scale professional kitchens.",
+        "Often called 'yellow gold' by food scientists, unsalted butter should be enjoyed in its purest form for maximum taste."
+      ]
+    }
+  ]
+}
