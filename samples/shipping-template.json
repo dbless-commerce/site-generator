@@ -1,0 +1,11 @@
+{
+  "freeShippingWeightKg": 15,
+  "rules": [
+    { "maxWeightKg": 0.5, "extraCost": 0 },
+    { "maxWeightKg": 1, "extraCost": 5 },
+    { "maxWeightKg": 2, "extraCost": 10 },
+    { "maxWeightKg": 5, "extraCost": 20 },
+    { "maxWeightKg": 10, "extraCost": 35 },
+    { "maxWeightKg": 15, "extraCost": 50 }
+  ]
+}

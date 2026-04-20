@@ -1,0 +1,121 @@
+{
+  "pageSubtitle": "Site subtitle / slogan displayed on pages.",
+  "pages": {
+    "index": {
+      "title": "Home Page Title",
+      "description": "Home page meta description.",
+      "keywords": "home, keywords"
+    },
+    "products": {
+      "title": "Products Page Title",
+      "description": "Products page meta description.",
+      "keywords": "products, keywords"
+    },
+    "story": {
+      "title": "Story Page Title",
+      "description": "Story page meta description.",
+      "keywords": "story, keywords",
+      "url": "story",
+      "content": {
+        "type": "story",
+        "sections": [
+          {
+            "title": "Section Title",
+            "text": "Section content text."
+          }
+        ]
+      }
+    },
+    "about": {
+      "title": "About Page Title",
+      "description": "About page meta description.",
+      "keywords": "about, keywords",
+      "url": "about",
+      "content": {
+        "type": "about",
+        "sections": [
+          {
+            "title": "Who Are We?",
+            "text": "About section content."
+          }
+        ]
+      }
+    },
+    "site-map": {
+      "title": "Site Map Title",
+      "description": "Site map description.",
+      "keywords": "site map"
+    },
+    "404": {
+      "title": "404 - Page Not Found",
+      "description": "Error page description.",
+      "keywords": "page not found, 404"
+    }
+  },
+  "headerSloganStart": "First line of header slogan",
+  "headerSloganEnd": "Second line of header slogan.",
+  "headerButton": "Browse Products",
+  "headerLink": "/products.html",
+  "footerSloganStart": "First line of footer slogan",
+  "footerSloganEnd": "Second line of footer slogan.",
+  "footerButton": "Our Story",
+  "footerLink": "/story.html",
+  "basketWarning": "Warning text shown in basket section.",
+  "map": "View on Map",
+  "home": "Home",
+  "products": "Products",
+  "about": "About",
+  "story": "Our Story",
+  "distanceSales": "Distance Sales Agreement",
+  "privacy": "Privacy Policy",
+  "kvkk": "KVKK Notice",
+  "contact": "Contact",
+  "sitemap": "Site Map",
+  "addToBasket": "Add to Cart",
+  "hideBasket": "Hide Cart",
+  "showBasket": "Show Cart",
+  "emptyBasket": "Empty Cart",
+  "quantity": "Quantity",
+  "orderViaWhatsapp": "Send Order via WhatsApp",
+  "productTotal": "Product Total",
+  "vatIncluded": "(VAT Included)",
+  "freeShippingNote": "Free shipping for orders 15 kg and above.",
+  "shippingCost": "Shipping Cost:",
+  "notUsingWhatsapp": "If you are not using WhatsApp",
+  "contactUsWithEmail": "For orders and questions, contact us",
+  "reachUsViaEmail": "You can reach us via email",
+  "shippingTaxNote": " TL (Including Taxes)",
+  "shippingFree": "Your shipping is free",
+  "grandTotal": "Grand Total",
+  "pageNotFoundTitle": "Page Not Found",
+  "pageNotFoundMessage": "The page you are looking for was not found.",
+  "navigation": [
+    { "title": "Home", "url": "/", "key": "home" },
+    { "title": "Products", "url": "/products.html", "key": "products" },
+    { "title": "About", "url": "/about.html", "key": "about" },
+    { "title": "Our Story", "url": "/story.html", "key": "story" },
+    { "title": "Contact", "url": "/contact.html", "key": "contact" }
+  ],
+  "footerLinks": [
+    { "title": "Distance Sales Agreement", "url": "/distance-sales-agreement.html" },
+    { "title": "KVKK", "url": "/kvkk.html" },
+    { "title": "Privacy Policy", "url": "/privacy-policy.html" },
+    { "title": "Site Map", "url": "/site-map.html" }
+  ],
+  "sitemapLinks": [
+    { "title": "Home", "url": "/index.html" },
+    { "title": "Products", "url": "/products.html" },
+    { "title": "About", "url": "/about.html" },
+    { "title": "Our Story", "url": "/story.html" },
+    { "title": "Contact", "url": "/contact.html" },
+    { "title": "Site Map", "url": "/site-map.html" }
+  ],
+  "images": {
+    "header": "header.jpg",
+    "footer": "footer.jpg",
+    "about": "about.jpg",
+    "story": "story.jpg",
+    "contact": "contact.jpg",
+    "404": "404.jpg"
+  }
+}

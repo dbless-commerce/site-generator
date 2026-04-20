@@ -1,0 +1,14 @@
+{
+  "history": [
+    {
+      "productId": "product-id",
+      "changes": [
+        {
+          "date": "2025-01-01",
+          "oldPrice": 180,
+          "newPrice": 210
+        }
+      ]
+    }
+  ]
+}

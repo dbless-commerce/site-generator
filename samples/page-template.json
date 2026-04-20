@@ -1,0 +1,22 @@
+{
+  "title": "Page Title | Brand Name",
+  "description": "Meta description for SEO purposes.",
+  "keywords": "keyword1, keyword2, keyword3",
+  "url": "page-slug",
+  "content": {
+    "type": "story|about|legal",
+    "sections": [
+      {
+        "title": "Section Title",
+        "text": "Section body text paragraph."
+      },
+      {
+        "title": "Section With List",
+        "text": "Introductory text for the list below:",
+        "list": ["Item 1", "Item 2", "Item 3"],
+        "listType": "ul",
+        "additionalText": "Optional additional text after the list."
+      }
+    ]
+  }
+}

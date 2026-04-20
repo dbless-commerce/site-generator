@@ -1,0 +1,17 @@
+{
+  "name": "Company Display Name",
+  "legalName": "Full Legal Name",
+  "address": [
+    "Street Address Line 1",
+    "Street Address Line 2",
+    "City / District"
+  ],
+  "phone": "+90 000 000 00 00",
+  "email": "info@example.com",
+  "instagram": "https://www.instagram.com/your-handle/",
+  "facebook": "#",
+  "linkedin": "#",
+  "mapLink": "https://maps.google.com/?q=your+address",
+  "slogan": "Your company slogan here.",
+  "description": "Brief company description for SEO."
+}
