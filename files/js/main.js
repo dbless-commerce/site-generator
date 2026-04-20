@@ -5,6 +5,8 @@ let BASKET = [];
 let PRODUCTS = [];
 let COMPANY = {};
 let SITE = {};
+let SHIPPING_DATA = null;
+let PRICE_HISTORY = [];
 
 // Device detection
 const IS_M = window.innerWidth < 777;
@@ -139,11 +141,13 @@ function imgWithBtn(src, btnText, btnLink, slogans) {
 // Load data function
 async function loadData() {
   try {
-    const [companyResponse, productsResponse, siteResponse] = await Promise.all(
+    const [companyResponse, productsResponse, siteResponse, shippingResponse, priceHistoryResponse] = await Promise.all(
       [
         fetch("/data/company.json"),
         fetch("/data/products.json"),
         fetch("/data/site.json"),
+        fetch("/data/shippingData.json").catch(() => null),
+        fetch("/data/priceHistory.json").catch(() => null),
       ]
     );
 
@@ -151,9 +155,75 @@ async function loadData() {
     const productsData = await productsResponse.json();
     PRODUCTS = productsData.products || [];
     SITE = await siteResponse.json();
+
+    if (shippingResponse && shippingResponse.ok) {
+      SHIPPING_DATA = await shippingResponse.json();
+    }
+
+    if (priceHistoryResponse && priceHistoryResponse.ok) {
+      const priceData = await priceHistoryResponse.json();
+      PRICE_HISTORY = priceData.history || [];
+    }
   } catch (error) {
     console.error("Error loading data:", error);
   }
+}
+
+// Shipping calculation using loaded JSON data
+function calcShip(w) {
+  if (SHIPPING_DATA) {
+    if (w >= SHIPPING_DATA.freeShippingWeightKg) {
+      return 0;
+    }
+    let extraCost = 0;
+    for (let rule of SHIPPING_DATA.rules) {
+      if (w <= rule.maxWeightKg) {
+        extraCost = rule.extraCost;
+        break;
+      }
+    }
+    return extraCost;
+  }
+  // Fallback if shipping data not loaded
+  if (w <= 3) {
+    return 146;
+  } else if (w <= 5) {
+    return 168;
+  } else if (w <= 10) {
+    return 96;
+  } else if (w < 15) {
+    return 123;
+  } else {
+    return 0;
+  }
+}
+
+// Price history helpers
+function getProductPriceHistory(productId) {
+  if (!PRICE_HISTORY.length) return null;
+  const entry = PRICE_HISTORY.find((h) => h.productId === productId);
+  return entry ? entry.changes : null;
+}
+
+function getPreviousPrice(productId) {
+  const changes = getProductPriceHistory(productId);
+  if (changes && changes.length > 0) {
+    return changes[0].oldPrice;
+  }
+  return null;
+}
+
+function renderPriceHistory(productId) {
+  const container = document.createElement("div");
+  container.className = "price-history";
+  const previousPrice = getPreviousPrice(productId);
+  if (previousPrice !== null) {
+    const oldPriceEl = document.createElement("span");
+    oldPriceEl.className = "old-price";
+    oldPriceEl.textContent = formatPrice(previousPrice);
+    container.appendChild(oldPriceEl);
+  }
+  return container;
 }
 
 // Basket functionality - YOUR EXACT IMPLEMENTATION
@@ -232,7 +302,7 @@ function addToBasket(prdId, quantity) {
   console.log("Added to basket, link:", linkWithParams);
 
   refreshBasket();
-  updateBasketParams(); // ✅
+  updateBasketParams();
 }
 
 function decreaseBasket(prdId, quantity) {
@@ -240,7 +310,7 @@ function decreaseBasket(prdId, quantity) {
     p.id === prdId ? { ...p, quantity: quantity - 1 } : p
   );
   refreshBasket();
-  updateBasketParams(); // ✅
+  updateBasketParams();
 }
 
 function emptyBasket() {
@@ -250,13 +320,13 @@ function emptyBasket() {
   });
   BASKET = [];
   refreshBasket();
-  updateBasketParams(); // ✅
+  updateBasketParams();
 }
 
 function removeFromBasket(prdId) {
   BASKET = BASKET.filter((p) => p.id !== prdId);
   refreshBasket();
-  updateBasketParams(); // ✅
+  updateBasketParams();
 
   cPrd("#products", prdId);
   cPrd(".prd", prdId);
@@ -276,20 +346,6 @@ function cPrdAdd(sel, p) {
   }
 }
 
-function calcShip(w) {
-  if (w <= 3) {
-    return 146;
-  } else if (w <= 5) {
-    return 168;
-  } else if (w <= 10) {
-    return 192 / 2;
-  } else if (w < 15) {
-    return 247 / 2;
-  } else {
-    return 0;
-  }
-}
-
 function getTotals() {
   let total = 0;
   const qp = [];
@@ -303,45 +359,6 @@ function getTotals() {
   });
 
   return { total, qp, w };
-}
-
-
-async function loadShippingAndCalculate(BASKET, shippingMethodId = "standard") {
-  const res = await fetch('../data/shippingData.json');
-  const shippingData = await res.json();
-
-  let productTotal = 0;
-  let totalWeight = 0;
-  const qp = [];
-
-  BASKET.forEach(p => {
-    qp.push(`${p.id}=${p.quantity}`);
-    productTotal += p.price * p.quantity;
-
-    const numPart = Number.parseInt(p.id.replace(/\D/g, ""), 10);
-    totalWeight += (numPart / 1000) * p.quantity;
-  });
-
-  const method = shippingData.methods.find(m => m.id === shippingMethodId);
-
-  let extraCost = 0;
-  for (let rule of shippingData.rules) {
-    if (totalWeight <= rule.maxWeightKg) {
-      extraCost = rule.extraCost;
-      break;
-    }
-  }
-
-  let shippingCost = (totalWeight >= shippingData.freeShippingWeightKg) ? 0 : method.baseCost + extraCost;
-  const grandTotal = productTotal + shippingCost;
-
-  return {
-    productTotal,
-    shippingCost,
-    grandTotal,
-    totalWeight,
-    qp
-  };
 }
 
 function doProductInner($p, prd, isLinked) {
@@ -358,6 +375,13 @@ function doProductInner($p, prd, isLinked) {
   $pr.innerHTML = `${prd.price} TL <em>(KDV Dahil)</em>`;
   $p.append($pr);
 
+  // Render price history if available
+  const prevPrice = getPreviousPrice(prd.id);
+  if (prevPrice !== null) {
+    const $ph = renderPriceHistory(prd.id);
+    $p.append($ph);
+  }
+
   if (isLinked) {
     $img.addEventListener("click", fpc);
     $n.addEventListener("click", fpc);
@@ -371,9 +395,6 @@ function fpc() {
 
 function refreshBasket() {
   const { total, qp, w } = getTotals();
-
-  // FIXED: Don't modify URL automatically - only when explicitly needed
-  // This prevents the URL from changing and removing basket parameters
 
   const $bi = document.getElementById("basketInfo");
   if (BASKET.length > 0) {
@@ -424,7 +445,7 @@ function refreshBasket() {
     $e.style.marginTop = "-5px";
 
     const ship = calcShip(w);
-    if (w < 15) {
+    if (w < (SHIPPING_DATA ? SHIPPING_DATA.freeShippingWeightKg : 15)) {
       const $c = p(
         (SITE.shippingCost || "Kargo Ücreti:") +
           " " +
@@ -551,10 +572,8 @@ function formatPrice(price) {
 function updateBasketParams() {
   const params = new URLSearchParams(window.location.search);
 
-  // حذف كل المنتجات من البارامز قبل الإضافة مجددًا
   BASKET.forEach((p) => params.delete(p.id));
 
-  // إضافة المنتجات الحالية
   BASKET.forEach((p) => {
     params.set(p.id, p.quantity);
   });
@@ -694,6 +713,22 @@ function handleUrlParameters() {
   }
 }
 
+// Render price history on product detail pages
+function renderProductPagePriceHistory() {
+  const prdElements = document.querySelectorAll(".prd li[data-id], #products li[data-id]");
+  prdElements.forEach((el) => {
+    const prdId = el.dataset.id;
+    const prevPrice = getPreviousPrice(prdId);
+    if (prevPrice !== null) {
+      const strongEl = el.querySelector("strong");
+      if (strongEl && !el.querySelector(".price-history")) {
+        const $ph = renderPriceHistory(prdId);
+        strongEl.parentNode.insertBefore($ph, strongEl);
+      }
+    }
+  });
+}
+
 // Initialize basket functionality
 function initializeBasket() {
   const basketInfo = document.getElementById("basketInfo");
@@ -729,11 +764,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("Site loaded successfully");
 
   try {
-    // Load data first
+    // Load data first (includes shipping and price history)
     await loadData();
 
     // Initialize basket functionality
     initializeBasket();
+
+    // Render price history on existing product elements
+    renderProductPagePriceHistory();
 
     // Handle URL parameters after a delay
     setTimeout(() => {
@@ -742,7 +780,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Initial basket refresh
     refreshBasket();
-    updateBasketParams(); // ✅
+    updateBasketParams();
   } catch (error) {
     console.error("Error initializing site:", error);
   }
