@@ -23,6 +23,7 @@ generate_product_card() {
         <li data-id="$id">
             <img src="/static/img/products/$url.jpg" alt="$name" data-url="$url"$([ "$is_linked" = "true" ] && echo ' onclick="navigateToProduct(this)"') />
             <h2 data-url="$url"$([ "$is_linked" = "true" ] && echo ' onclick="navigateToProduct(this)"')>$name</h2>
+            <div class="price-history"></div>
             <strong>$price TL <em>$vat_included</em></strong>
 $([ "$is_linked" = "true" ] && echo "            <p>$short_desc</p>")
             <button class="btnAddToBasket" onclick="fnAddToBasket.call(this)">$add_to_basket</button>
@@ -92,6 +93,7 @@ generate_product_detail_content() {
         <li data-id="$id">
             <img src="/static/img/products/$url.jpg" alt="$name" data-url="$url" />
             <h2 data-url="$url">$name</h2>
+            <div class="price-history"></div>
             <strong>$price TL <em>$vat_included</em></strong>
             <button class="btnAddToBasket" onclick="fnAddToBasket.call(this)">$add_to_basket</button>
             <br/>

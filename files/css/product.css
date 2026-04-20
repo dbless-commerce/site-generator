@@ -97,3 +97,15 @@
   line-height: 1.66;
   display: block;
 }
+
+.price-history {
+  display: inline-block;
+  margin: 3px 0;
+}
+
+.price-history .old-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+  margin-right: 5px;
+}
