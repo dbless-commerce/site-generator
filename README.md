@@ -36,19 +36,36 @@ git submodule update --init --recursive
 #   - jq  (JSON parser — required)
 #   - node + npx (for local preview only)
 
-# 3. Build every language site
-./generate-all.sh
-
-# 4. Preview locally (serves site-en on http://localhost:8000)
-npx http-server site-en -p 8000 -c-1
-```
-
-Made a change? Use the **incremental update** script:
-
-```bash
-./update.sh            # detects & rebuilds only what changed
-./update.sh en         # force-rebuild one language
-./update.sh --all      # rebuild everything (same as generate-all.sh)
+```plaintext
+SITE-GENERATOR/
+├── generate-all.sh              # Main generation script
+├── files/                       # Static assets used by the generated sites
+│   ├── css/                     # Global CSS styles
+│   ├── img/                     # Images and icons
+│   └── js/                      # JavaScript files
+│
+├── scripts/                     # All automation scripts
+│   ├── generators/              # Generators for specific content
+│   │   ├── html-generators.sh   # Generates HTML pages
+│   │   └── product-generators.sh# Generates product-related pages/content
+│   │
+│   ├── tasks/                   # Utility tasks for building assets
+│   │   ├── copy-images.sh       # Copies images to the build folder
+│   │   ├── create-css.sh        # Builds/merges CSS files
+│   │   ├── create-pages.sh      # Creates static pages
+│   │   ├── create-products.sh   # Creates product pages
+│   │   └── merge-js.sh          # Merges and processes JS functionality
+│   │
+│   └── utils/                   # Helper functions for scripts
+│       └── utils.sh             # Common shell utilities
+│       └── push-sites.sh        # Deploy/push sites to the server or repo
+│
+├── site-ar/                     # Generated site content in Arabic
+├── site-en/                     # Generated site content in English
+├── site-tr/                     # Generated site content in Turkish
+│
+└── .editorconfig                # Editor configuration for consistent coding style
+└── .gitmodules                  # Git submodules configuration
 ```
 
 ---
@@ -65,130 +82,174 @@ Made a change? Use the **incremental update** script:
 | 📦 Smart shipping | Centralized rules in `shippingData.json`, loaded once and cached client-side |
 | 📝 Templates | `samples/` contains starter JSONs for every data file — copy & fill |
 
----
+Each language version is a separate GitHub repository, added as a Git submodule to this main generator repo.
 
-## 📁 Project Structure
+- Host different language sites at different subdomains (`tr.example.com`, `en.example.com`, etc.)
+- Manage content in isolation while sharing a common structure.
 
-```
-site-generator/
-├── files/                  # Shared assets (CSS, JS, default images)
-│   ├── css/
-│   ├── js/main.js          # Basket, WhatsApp, shipping logic
-│   └── img/pages/          # Default page images (+ samples/)
-│
-├── scripts/
-│   ├── tasks/              # Pipeline steps (pages, css, products, images, js)
-│   ├── generators/         # HTML/product template generators
-│   └── utils/              # Shared bash helpers + push-sites.sh
-│
-├── samples/                # 📋 Template JSONs — copy these when scaffolding
-│   ├── site-template.json
-│   ├── company-template.json
-│   ├── product-template.json
-│   ├── page-template.json
-│   ├── shipping-template.json
-│   └── priceHistory-template.json
-│
-├── site-en/  site-ar/  site-tr/   # Per-language sites (git submodules)
-│   └── data/*.json         # Content for that locale
-│
-├── generate-all.sh         # Full rebuild across all languages
-├── update.sh               # Incremental rebuild — detects changes
-└── index.html              # Language landing page
-```
+📖 [Learn more about Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
 
----
-
-## 🔄 How It Works
-
-1. **You edit JSON** in `site-<lang>/data/` (site config, products, shipping, etc.).
-2. **Run `./update.sh`** — it checks mtimes against `.last_build`, decides which sites need regenerating, then pipes:
-   - `create-pages.sh` → renders HTML pages from templates
-   - `create-products.sh` → builds per-product pages
-   - `create-css.sh` → bundles CSS
-   - `copy-images.sh` → copies defaults + applies per-site overrides
-   - `create-js.sh` → merges shared JS into each site
-3. **The result** lands inside each submodule (`site-en/`, `site-ar/`, `site-tr/`), ready to commit and push independently.
-
-### 🧱 Language submodules
-
-Each language site is its own GitHub repo, included here as a submodule. That lets you:
-- Deploy each to a separate subdomain (`en.example.com`, `ar.example.com`, …)
-- Version and release locales independently
-- Share the generator, templates, and assets across all of them
-
----
-
-## 🛠️ Scripts Reference
-
-| Script | Purpose |
-| --- | --- |
-| `./generate-all.sh` | Full rebuild of every language site (runs all pipeline tasks) |
-| `./update.sh` | Incremental rebuild — auto-detects changed data or shared assets |
-| `./update.sh <lang>...` | Force-rebuild specific languages (e.g. `./update.sh en tr`) |
-| `./update.sh --all` | Force-rebuild everything |
-| `scripts/utils/push-sites.sh` | Commit & push each submodule |
-| `scripts/tasks/create-pages.sh` | Generate HTML pages for a language |
-| `scripts/tasks/create-products.sh` | Generate product pages |
-| `scripts/tasks/create-css.sh` | Bundle CSS into each site |
-| `scripts/tasks/copy-images.sh` | Copy default page images + apply overrides |
-| `scripts/tasks/create-js.sh` | Merge shared JS into each site |
-
----
-
-## 📄 Data Files
-
-Every language site expects these JSON files in `site-<lang>/data/`:
-
-| File | What it contains |
-| --- | --- |
-| `site.json` | Branding, menu, page copy, optional `images` override map |
-| `company.json` | Company info (name, addresses, contact, socials) |
-| `product.json` | Products, categories, product settings |
-| `shippingData.json` | Weight-based shipping rules + free-shipping threshold |
-| `priceHistory.json` | Historical price changes per product (optional) |
-| `home.json`, `404.json`, `sitemap.json` | Per-page content not already in `site.json` |
-
-**Don't start from scratch** — copy from `samples/`:
+⚠️ **Why initialize submodules?**  
+Because the language folders (`site-ar`, `site-en`, `site-tr`) are *not* regular folders but linked repositories.  
+Without initializing, they will be empty placeholders.
 
 ```bash
-cp samples/site-template.json     site-fr/data/site.json
-cp samples/product-template.json  site-fr/data/product.json
-cp samples/shipping-template.json site-fr/data/shippingData.json
+git submodule update --init --recursive
+```
+
+📖 [GitHub Pages documentation](https://docs.github.com/en/pages)
+
+---
+
+## 🛒 Order Flow
+
+```mermaid
+sequenceDiagram
+    participant Customer
+    participant Website
+    participant WhatsApp
+    participant Admin
+    participant TrackingNotebook
+
+    Customer->>Website: Browse products
+    Customer->>Website: Add product to cart
+    Website->>WhatsApp: Generate order message link
+    Customer->>WhatsApp: Send order via WhatsApp
+    WhatsApp->>Admin: Receive order message
+    Admin->>TrackingNotebook: Generate reference number
+    Admin->>TrackingNotebook: Store customer address
+    Admin->>Customer: Confirm order with reference number
 ```
 
 ---
 
-## ➕ Adding a New Language
+## 📝 Managing Page Content
+
+All text and configuration for each language site are stored in the `data/site.json` file inside the respective language folder (`site-ar`, `site-en`, `site-tr`).
+
+- **Static text** (homepage content, about page, etc.) is stored as key/value pairs.
+- **Images** are stored in `files/img/` and referenced in JSON files.
+- **Admin editing**: These JSON files can be updated directly in GitHub, or through a planned admin interface for non-technical editors.
+
+---
+
+## 📒 Order Tracking Notebook
+
+For every order:
+
+1. The admin assigns a **Reference Number** to the customer’s address in chat.
+2. The customer’s **address** and order details are stored in a simple tracking notebook (JSON or CSV) for future reference and repeat sales.
+
+Example structure (`tracking-notebook.json`):
+
+```json
+[
+  {
+    "referenceNumber": "REF-20250805-01",
+    "customerName": "Ali Ahmad",
+    "address": "Gaza City, Palestine",
+    "orderDetails": [
+      {"productId": "p500", "quantity": 2}
+    ],
+    "status": "Pending"
+  }
+]
+```
+
+---
+
+## 💰 Product Price & Shipping Cost
+
+- **Current prices** are stored in `product.json` for each language site.
+- **Shipping costs** are stored in `data/shipping.json` in each language site.
+
+Since these values change frequently, maintain a **history** in a separate file:
+
+Example (`price-history.json`):
+
+```json
+[
+  {
+    "productId": "p500",
+    "date": "2025-08-01",
+    "price": 210,
+    "shippingCost": 20
+  }
+]
+```
+
+This allows you to track changes over time and adjust pricing easily.
+
+---
+
+## ➕ Adding New Content
+
+### 🆕 Product JSON Structure
+
+```jsonc
+{
+  "id": "p500",
+  "name": "Erzincan Tulum",
+  "url": "erzincan-tulum",
+  "price": 210,
+  "currency": "USD",
+  "shortDesc": "Short desc",
+  "metaDesc": "Meta desc",
+  "keywords": "cheese, organic",
+  "image": "/static/img/products/erzincan-tulum.jpg",
+  "weight": "500g",
+  "category": "cheese",
+  "featured": true,
+  "inStock": true
+}
+```
+
+Add your product in `site-<lang>/data/product.json` then run:
 
 ```bash
-# 1. Create the submodule (or a plain directory while prototyping)
-mkdir -p site-fr/data
+./generate-all.sh
+```
 
-# 2. Seed data from templates
-for t in site company product shipping; do
-  cp "samples/${t}-template.json" "site-fr/data/${t/shipping/shippingData}.json"
-done
+---
 
-# 3. Register the language in scripts/utils/utils.sh (LANGUAGES array)
+### 🌍 Add a New Language
+
+1. Create a new repo for the language (e.g., `site-fr`).
+2. Add it as a submodule:
+```bash
+git submodule add <repo-url> site-fr
+```
+3. Create the data/ folder inside the new language repo and add the required JSON files.
+4. Translate content in the JSON files to the new language.
+5. Run the generator script to build the site:
+```bash
+./generate-all.sh
+```
 
 # 4. Generate
 ./update.sh fr
 ```
 
----
+### 📄 Add a New Page
 
-## 📰 Adding a New Page or Product
-
-**New page:**
-
+1. Update `site-<lang>/data/site.json`
+2. Add a new page entry
+3. Run:
 ```bash
-cp samples/page-template.json site-en/data/faq.json
-# edit faq.json with your content, then:
-./update.sh en
+./scripts/tasks/create-pages.sh
 ```
 
-**New product:** add an entry to the `products` array in `site-<lang>/data/product.json` (use `samples/product-template.json` as a field reference), drop the product image into `files/img/products/`, then `./update.sh`.
+---
+
+## 🚀 Build & Deploy in One Step
+
+Instead of running separate generate and deploy commands, use:
+
+```bash
+./scripts/utils/push-sites.sh
+```
+
+This will generate all sites and deploy them to their respective submodules in one go.
 
 ---
 
@@ -214,24 +275,8 @@ Add an `images` map to any `site-<lang>/data/site.json` to swap defaults for tha
 
 `copy-images.sh` copies defaults first, then replaces them with overrides where defined.
 
----
-
-## 🚚 Shipping Configuration
-
-Shipping is **data-driven**, not hardcoded. Edit `site-<lang>/data/shippingData.json`:
-
-```json
-{
-  "freeShippingWeightKg": 15,
-  "rules": [
-    { "maxWeightKg": 0.5, "extraCost": 0 },
-    { "maxWeightKg": 1,   "extraCost": 5 },
-    { "maxWeightKg": 2,   "extraCost": 10 },
-    { "maxWeightKg": 5,   "extraCost": 20 },
-    { "maxWeightKg": 10,  "extraCost": 35 },
-    { "maxWeightKg": 15,  "extraCost": 50 }
-  ]
-}
+```bash
+./generate-all.sh
 ```
 
 `main.js` loads this once on init, caches it, and uses it for the basket summary and the WhatsApp order message.
@@ -252,13 +297,4 @@ Shipping is **data-driven**, not hardcoded. Edit `site-<lang>/data/shippingData.
 
 ## 🤝 Contributing
 
-Issues and PRs are welcome. When adding a feature:
-1. Update or add a template in `samples/` if you introduced a new JSON field.
-2. Keep shared logic in `files/` and `scripts/` — per-site files should only hold content.
-3. Run `./update.sh --all` locally before opening a PR.
-
----
-
-## 🪪 License
-
-[MIT](./LICENSE)
+Feel free to open issues or PRs to improve the generator or add new features.
