@@ -1,0 +1,64 @@
+{
+  "products": [
+    {
+      "id": "unique-id",
+      "name": "Product Name",
+      "url": "product-slug",
+      "price": 100,
+      "currency": "USD",
+      "shortDesc": "Short description for product cards.",
+      "metaDesc": "Meta description for SEO.",
+      "keywords": "keyword1, keyword2",
+      "image": "/static/img/products/product-slug.jpg",
+      "weight": "500g",
+      "category": "category-id",
+      "featured": true,
+      "inStock": true,
+      "nutritionalInfo": {
+        "protein": "25g per 100g",
+        "fat": "30g per 100g",
+        "calcium": "High",
+        "vitamins": ["A", "D", "K"]
+      },
+      "storage": {
+        "temperature": "2-4C",
+        "humidity": "85-90%",
+        "shelfLife": "6 months",
+        "instructions": "Storage instructions here"
+      },
+      "longDesc": [
+        "Detailed description paragraph 1.",
+        "Detailed description paragraph 2."
+      ],
+      "features": [
+        {
+          "title": "Feature Title",
+          "description": "Feature description",
+          "icon": "icon-name"
+        }
+      ],
+      "pairings": ["Pairing 1", "Pairing 2"],
+      "recipes": [
+        {
+          "name": "Recipe Name",
+          "description": "Recipe description"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "category-id",
+      "name": "Category Name",
+      "description": "Category description",
+      "icon": "icon-name"
+    }
+  ],
+  "productSettings": {
+    "defaultCurrency": "USD",
+    "showWeight": true,
+    "showCategory": true,
+    "enableFiltering": true,
+    "maxRelatedProducts": 4
+  }
+}

@@ -1,19 +1,40 @@
-# 🛍️ DBless Multilingual eCommerce Website via WhatsApp
+# 🛍️ DBless Multilingual eCommerce Site Generator
 
-This project is a **database-free eCommerce site generator** that uses **WhatsApp** for handling customer orders and communication. It supports **multiple languages**, with each language version hosted on a separate GitHub Pages subdomain via **Git submodules**.
+A **database-free** eCommerce site generator that routes orders through **WhatsApp**. Maintain one source of data, generate static sites in **multiple languages**, and deploy each one to its own subdomain.
 
----
-
-## 🌐 Key Features
-
-- ✅ **No database needed** — Orders are placed via WhatsApp, avoiding complex data compliance issues.
-- 🌍 **Multilingual support** — Turkish (`tr`), Arabic (`ar`), and English (`en`) versions managed through Git submodules.
-- ⚙️ **Automated site generation** — Run a script to rebuild and deploy all language sites in one go.
-- 🗂️ **Clean, structured repo** — Uses centralized JSON files and organized folders for data and images.
+> 🇬🇧 English · 🇸🇦 العربية · 🇹🇷 Türkçe — all built from shared templates, one JSON file per site.
 
 ---
 
-## 📁 Project Structure
+## 📑 Table of Contents
+
+- [Quick Start](#-quick-start)
+- [Key Features](#-key-features)
+- [Project Structure](#-project-structure)
+- [How It Works](#-how-it-works)
+- [Scripts Reference](#-scripts-reference)
+- [Data Files](#-data-files)
+- [Adding a New Language](#-adding-a-new-language)
+- [Adding a New Page or Product](#-adding-a-new-page-or-product)
+- [Image Management](#-image-management)
+- [Shipping Configuration](#-shipping-configuration)
+- [Troubleshooting](#-troubleshooting)
+- [Contributing](#-contributing)
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# 1. Clone with submodules
+git clone <repo-url>
+cd site-generator
+git submodule update --init --recursive
+
+# 2. Install required dependencies
+#   - bash 4+
+#   - jq  (JSON parser — required)
+#   - node + npx (for local preview only)
 
 ```plaintext
 SITE-GENERATOR/
@@ -49,9 +70,17 @@ SITE-GENERATOR/
 
 ---
 
-## 🔄 How It Works
+## ✨ Key Features
 
-### 🧩 Language Submodules
+| Feature | What it gives you |
+| --- | --- |
+| 🗄️ No database | Orders flow through WhatsApp — no backend, no compliance overhead |
+| 🌍 Multilingual | Arabic / English / Turkish sites, each a git submodule at its own subdomain |
+| ⚡ Incremental builds | `update.sh` only rebuilds sites whose data actually changed |
+| 🧩 JSON-driven | All content lives in `site-<lang>/data/*.json` — edit once, regenerate, done |
+| 🖼️ Image overrides | Per-site image themes via `images` map in `site.json`, with sensible defaults |
+| 📦 Smart shipping | Centralized rules in `shippingData.json`, loaded once and cached client-side |
+| 📝 Templates | `samples/` contains starter JSONs for every data file — copy & fill |
 
 Each language version is a separate GitHub repository, added as a Git submodule to this main generator repo.
 
@@ -197,7 +226,9 @@ git submodule add <repo-url> site-fr
 ./generate-all.sh
 ```
 
----
+# 4. Generate
+./update.sh fr
+```
 
 ### 📄 Add a New Page
 
@@ -222,30 +253,48 @@ This will generate all sites and deploy them to their respective submodules in o
 
 ---
 
-## 🛠️ Development Setup
+## 🖼️ Image Management
 
-Clone the repo and initialize submodules:
+- **Default page images** live in `files/img/pages/` (`header.jpg`, `about.jpg`, `footer.jpg`, …).
+- **Product images** live in `files/img/products/` — filename must match the product's `url` slug.
+- **Themed sample images** live in `files/img/pages/samples/` (e.g. `white-back-brown-dogs.jpg`, `sky-back-pink-flamingos.jpg`).
 
-```bash
-git clone <repo-url>
-cd site-generator
-git submodule update --init --recursive
+### Per-site image overrides
+
+Add an `images` map to any `site-<lang>/data/site.json` to swap defaults for that language:
+
+```json
+{
+  "images": {
+    "header": "white-back-brown-dogs.jpg",
+    "about":  "cream-back-orange-cats.jpg",
+    "footer": "sky-back-pink-flamingos.jpg"
+  }
+}
 ```
 
-After making changes to JSON files or static content:
+`copy-images.sh` copies defaults first, then replaces them with overrides where defined.
 
 ```bash
 ./generate-all.sh
 ```
 
----
-
-## 🪪 License
-
-This project is licensed under the [MIT License](./LICENSE).
+`main.js` loads this once on init, caches it, and uses it for the basket summary and the WhatsApp order message.
 
 ---
 
-## 📬 Contributions
+## 🧯 Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| `Missing dependencies: jq` | Install `jq` — `winget install jqlang.jq` (Windows), `brew install jq` (mac), `apt install jq` (Linux) |
+| `./update.sh` rebuilds nothing | Delete `.last_build` or run `./update.sh --all` |
+| Images not replaced by overrides | Make sure the file exists in `files/img/pages/samples/` and the key in `site.json` `images` matches the default filename |
+| Shipping numbers look wrong | Validate `shippingData.json` with `jq . site-en/data/shippingData.json` — JSON can't contain comments |
+| Submodule dir is empty | `git submodule update --init --recursive` |
+
+---
+
+## 🤝 Contributing
 
 Feel free to open issues or PRs to improve the generator or add new features.
